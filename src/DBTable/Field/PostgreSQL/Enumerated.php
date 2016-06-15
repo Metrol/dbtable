@@ -16,6 +16,13 @@ class Enumerated implements Field
     use PropertyTrait;
 
     /**
+     * List of allowed values for this field that have been assigned
+     *
+     * @var array
+     */
+    private $eVals;
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -23,5 +30,34 @@ class Enumerated implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
+
+        $this->eVals = [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->eVals;
+    }
+
+    /**
+     * Set the values that are allowed to be assigned to this field.  Once set,
+     * they may not be changed.
+     *
+     * @param array $values
+     *
+     * @return $this
+     */
+    public function setValues(array $values)
+    {
+        if ( empty($this->eVals) )
+        {
+            $this->eVals = $values;
+        }
+
+        return $this;
     }
 }

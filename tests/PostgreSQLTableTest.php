@@ -108,6 +108,15 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(-2147483648, $field->getMin());
         $this->assertEquals(2147483647, $field->getMax());
 
+        $field = $table->getField('twonumber');
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
+        $this->assertEquals('twonumber', $field->getName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+        $this->assertEquals(-9999.9999, $field->getMin());
+        $this->assertEquals(9999.9999, $field->getMax());
+
         $field = $table->getField('threenumber');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
         $this->assertEquals('threenumber', $field->getName());
@@ -125,6 +134,13 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-32768, $field->getMin());
         $this->assertEquals(32767, $field->getMax());
+
+        $field = $table->getField('yeahnay'); // An enum column
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Enumerated', $field);
+        $enumValues = $field->getValues();
+        $this->assertCount(2, $enumValues);
+        $this->assertEquals('Yes', $enumValues[0]);
+        $this->assertEquals('No', $enumValues[1]);
 
         // The primary key field and some of it's properties
         $field = $table->getField( $table->getPrimaryKeys()[0] );
