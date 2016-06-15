@@ -39,7 +39,7 @@ $defaultValue = $firstNameField->getDefaultValue();
 $maxChar = $firstNameField->getMaxCharacters();
 
 // For an integer field, you may want to know what the maximum allowed value is
-$maxValue = $indexField=>getMax(); 
+$maxValue = $indexField->getMax(); 
 ```
 
 These are just a few of the early examples.  Each major field type is given it's own class to provide all the information you would need to know what is and is not allowed to go into it at run time.
