@@ -142,6 +142,13 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Yes', $enumValues[0]);
         $this->assertEquals('No', $enumValues[1]);
 
+        $field = $table->getField('trueorfalse'); // Boolean
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Boolean', $field);
+        $this->assertEquals('trueorfalse', $field->getName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
         // The primary key field and some of it's properties
         $field = $table->getField( $table->getPrimaryKeys()[0] );
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
