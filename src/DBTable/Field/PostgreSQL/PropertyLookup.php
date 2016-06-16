@@ -345,9 +345,9 @@ class PropertyLookup
     {
         $field = new Fld\Enumerated($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
-
-        $eVals = $this->getEnumValues($fieldDef->udt_schema, $fieldDef->udt_name);
-        $field->setValues($eVals);
+        $field->setEnumType($fieldDef->udt_name)
+            ->setSchema($fieldDef->udt_schema)
+            ->runEnumValues($this->db);
 
         return $field;
     }
@@ -390,50 +390,6 @@ class PropertyLookup
         {
             $field->setPrimaryKey(false);
         }
-    }
-
-    /**
-     * Looks up the allowed values for the specified enum type
-     *
-     * @param string $schema
-     * @param string $enumType
-     *
-     * @return string[] List of allowed values
-     */
-    private function getEnumValues($schema, $enumType)
-    {
-        $binding = [
-            ':enumtype' => '_'.$enumType,
-            ':schema'   => $schema
-        ];
-
-        $sql = <<<SQL
-SELECT
-    trim(enumlabel) enumlabel
-FROM
-    pg_catalog.pg_enum e
-    JOIN pg_catalog.pg_type t
-        ON e.enumtypid = t.typelem
-        AND t.typname = :enumtype
-    JOIN pg_catalog.pg_namespace n
-        ON n.oid = t.typnamespace
-        AND n.nspname = :schema
-ORDER BY
-    e.enumsortorder ASC
-
-SQL;
-
-        $sth = $this->db->prepare($sql);
-        $sth->execute($binding);
-
-        $rtn = [];
-
-        while ( $row = $sth->fetch(PDO::FETCH_NUM) )
-        {
-            $rtn[] = $row[0];
-        }
-
-        return $rtn;
     }
 
     /**

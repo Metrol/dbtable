@@ -16,6 +16,20 @@ class Enumerated implements Field
     use PropertyTrait;
 
     /**
+     * The Enumerated Type this field uses
+     *
+     * @var string
+     */
+    private $enumType;
+
+    /**
+     * The Schema where the Enumerated Type exists
+     *
+     * @var string
+     */
+    private $schema;
+
+    /**
      * List of allowed values for this field that have been assigned
      *
      * @var array
@@ -31,7 +45,9 @@ class Enumerated implements Field
     {
         $this->fieldName = $fieldName;
 
-        $this->eVals = [];
+        $this->enumType = null;
+        $this->schema   = null;
+        $this->eVals    = [];
     }
 
     /**
@@ -56,6 +72,114 @@ class Enumerated implements Field
         if ( empty($this->eVals) )
         {
             $this->eVals = $values;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Provides the enumerated type this field uses.
+     *
+     * @return string
+     */
+    public function getEnumType()
+    {
+        return $this->enumType;
+    }
+
+    /**
+     * Set the enumerated type this field uses.
+     * Once set, this value can not be changed.
+     *
+     * @param string $enumType
+     *
+     * @return $this
+     */
+    public function setEnumType($enumType)
+    {
+        if ( $this->enumType == null )
+        {
+            $this->enumType = $enumType;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Provides the schema that the enumerated type is in
+     *
+     * @return string
+     */
+    public function getSchema()
+    {
+        return $this->schema;
+    }
+
+    /**
+     * Set the schema where the enumerated type exists.
+     * Once siet, the value can not be changed.
+     *
+     * @param string $schema
+     *
+     * @return $this
+     */
+    public function setSchema($schema)
+    {
+        if ( $this->schema == null )
+        {
+            $this->schema = $schema;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Looks up the allowed values for the specified enum type and assigns that
+     * list to this object.  May only be run once.
+     *
+     * @param \PDO $db
+     *
+     * @return $this
+     */
+    public function runEnumValues(\PDO $db)
+    {
+        if ( !empty($this->eVals) )
+        {
+            return $this;
+        }
+
+        if ( empty($this->enumType) or empty($this->schema) )
+        {
+            return $this;
+        }
+
+        $binding = [
+            ':enumtype' => '_'.$this->enumType,
+            ':schema'   => $this->schema
+        ];
+
+        $sql = <<<SQL
+SELECT
+    trim(enumlabel) enumlabel
+FROM
+    pg_catalog.pg_enum e
+    JOIN pg_catalog.pg_type t
+        ON e.enumtypid = t.typelem
+        AND t.typname = :enumtype
+    JOIN pg_catalog.pg_namespace n
+        ON n.oid = t.typnamespace
+        AND n.nspname = :schema
+ORDER BY
+    e.enumsortorder ASC
+
+SQL;
+
+        $sth = $db->prepare($sql);
+        $sth->execute($binding);
+
+        while ( $row = $sth->fetch(\PDO::FETCH_NUM) )
+        {
+            $this->eVals[] = $row[0];
         }
 
         return $this;
