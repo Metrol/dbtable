@@ -31,6 +31,7 @@ class PropertyLookup
     const T_NUMERIC      = 'numeric';
     const T_MONEY        = 'money';
     const T_DOUBLE_PREC  = 'double precision';
+    const T_REAL         = 'real';
     const T_VARCHAR      = 'character varying';
     const T_CHAR         = 'character';
     const T_TEXT         = 'text';
@@ -44,6 +45,8 @@ class PropertyLookup
     const T_TIMESTAMP    = 'timestamp without time zone';
     const T_TIME_TZ      = 'time with time zone';
     const T_TIME         = 'time without time zone';
+    const T_JSON         = 'json';
+    const T_XML          = 'xml';
 
     /**
      * The database connection to use for the lookup
@@ -127,6 +130,10 @@ class PropertyLookup
                     $field = $this->newNumericField($fieldDef);
                     break;
 
+                case self::T_REAL:
+                    $field = $this->newNumericField($fieldDef);
+                    break;
+
                 case self::T_VARCHAR:
                     $field = $this->newCharacterField($fieldDef);
                     break;
@@ -139,6 +146,26 @@ class PropertyLookup
                     $field = $this->newCharacterField($fieldDef);
                     break;
 
+                case self::T_DATE:
+                    $field = $this->newDateField($fieldDef);
+                    break;
+
+                case self::T_TIMESTAMP:
+                    $field = $this->newDateField($fieldDef);
+                    break;
+
+                case self::T_TIMESTAMP_TZ:
+                    $field = $this->newDateField($fieldDef);
+                    break;
+
+                case self::T_TIME:
+                    $field = $this->newTimeField($fieldDef);
+                    break;
+
+                case self::T_TIME_TZ:
+                    $field = $this->newTimeField($fieldDef);
+                    break;
+
                 case self::T_ARRAY:
                     $field = $this->newArrayField($fieldDef);
                     break;
@@ -149,6 +176,14 @@ class PropertyLookup
 
                 case self::T_ENUM:
                     $field = $this->newEnumeratedField($fieldDef);
+                    break;
+
+                case self::T_JSON:
+                    $field = $this->newJSONField($fieldDef);
+                    break;
+
+                case self::T_XML:
+                    $field = $this->newJSONField($fieldDef);
                     break;
             }
 
@@ -234,6 +269,66 @@ class PropertyLookup
     private function newBooleanField(\stdClass $fieldDef)
     {
         $field = new Fld\Boolean($fieldDef->column_name);
+        $this->setProperties($field, $fieldDef);
+
+        return $field;
+    }
+
+    /**
+     * Generate a new JSON field
+     *
+     * @param \stdClass $fieldDef
+     *
+     * @return DBTable\Field
+     */
+    private function newJSONField(\stdClass $fieldDef)
+    {
+        $field = new Fld\JSON($fieldDef->column_name);
+        $this->setProperties($field, $fieldDef);
+
+        return $field;
+    }
+
+    /**
+     * Generate a new XML field
+     *
+     * @param \stdClass $fieldDef
+     *
+     * @return DBTable\Field
+     */
+    private function newXMLField(\stdClass $fieldDef)
+    {
+        $field = new Fld\XML($fieldDef->column_name);
+        $this->setProperties($field, $fieldDef);
+
+        return $field;
+    }
+
+    /**
+     * Generate a new Date field
+     *
+     * @param \stdClass $fieldDef
+     *
+     * @return DBTable\Field
+     */
+    private function newDateField(\stdClass $fieldDef)
+    {
+        $field = new Fld\Date($fieldDef->column_name);
+        $this->setProperties($field, $fieldDef);
+
+        return $field;
+    }
+
+    /**
+     * Generate a new Time field
+     *
+     * @param \stdClass $fieldDef
+     *
+     * @return DBTable\Field
+     */
+    private function newTimeField(\stdClass $fieldDef)
+    {
+        $field = new Fld\Time($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
