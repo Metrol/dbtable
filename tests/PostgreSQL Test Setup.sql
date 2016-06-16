@@ -57,8 +57,6 @@ CREATE TABLE pgtable1
     sixnumber money,
     sevennumber double precision,
     eightnumber real,
-    sometimeone time without time zone,
-    sometimetwo time with time zone,
     jsonone json,
     xmarkuplang xml,
     CONSTRAINT pgtable1_pkey PRIMARY KEY ("primaryKeyID")
