@@ -40,21 +40,26 @@ CREATE TABLE pgtable1
 (
     "primaryKeyID" serial NOT NULL,
     onestring character varying(50),
-    twostring character(5) NOT NULL,
+    twostring character(5) NOT NULL DEFAULT 'ABCDE'::bpchar,
     threestring text DEFAULT 'blah blah'::text,
-    fourstring character varying(50)[],
     onenumber integer,
     twonumber numeric(8,4),
     threenumber bigint,
     fournumber smallint,
-    date_range_1 daterange,
-    date_range_2 "DateRange",
     yeahnay "YesNo",
-    compo "DatesAnswer",
     trueorfalse boolean,
     onedate date,
     twodate timestamp without time zone,
     threedate timestamp with time zone,
+    timeone time without time zone,
+    timetwo time with time zone,
+    fivenumber double precision,
+    sixnumber money,
+    sevennumber double precision,
+    eightnumber real,
+    sometimeone time without time zone,
+    sometimetwo time with time zone,
+    jsonone json,
     CONSTRAINT pgtable1_pkey PRIMARY KEY ("primaryKeyID")
 )
 WITH (
@@ -62,3 +67,4 @@ OIDS=FALSE
 );
 ALTER TABLE pgtable1
     OWNER TO testuser;
+
