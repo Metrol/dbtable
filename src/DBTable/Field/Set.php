@@ -67,6 +67,27 @@ class Set implements \Iterator, \Countable
     }
 
     /**
+     * Provide a dump of properties that can be used for a docBlock in an
+     * object dynamically dealing with fields.
+     *
+     * @return string
+     */
+    public function getDocBlockProperties()
+    {
+        $out = '';
+
+        foreach ( $this as $field )
+        {
+            $out .= ' * @property ';
+            $out .= $field->getPhpType();
+            $out .= ' $'.$field->getName();
+            $out .= PHP_EOL;
+        }
+
+        return $out;
+    }
+
+    /**
      * How many fields are in this set.
      *
      * @return integer
