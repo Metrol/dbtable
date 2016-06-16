@@ -16,6 +16,13 @@ class Integer implements Field
     use PropertyTrait;
 
     /**
+     * What kind of PHP type should be expected from a field like this.
+     *
+     * @const
+     */
+    const PHP_TYPE = 'integer';
+
+    /**
      * Multiplier to raise the bytes by to get the range of the integer
      *
      * @const
@@ -119,4 +126,13 @@ class Integer implements Field
 
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhpType()
+    {
+        return self::PHP_TYPE;
+    }
+
 }

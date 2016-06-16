@@ -20,6 +20,13 @@ class Numeric implements Field
     use PropertyTrait;
 
     /**
+     * What kind of PHP type should be expected from a field like this.
+     *
+     * @const
+     */
+    const PHP_TYPE = 'float';
+
+    /**
      * How many digits of precision used
      *
      * @var integer
@@ -113,4 +120,11 @@ class Numeric implements Field
         return $min;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getPhpType()
+    {
+        return self::PHP_TYPE;
+    }
 }

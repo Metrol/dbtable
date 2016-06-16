@@ -16,6 +16,13 @@ class Composite implements Field
     use PropertyTrait;
 
     /**
+     * What kind of PHP type should be expected from a field like this.
+     *
+     * @const
+     */
+    const PHP_TYPE = '\stdClass';
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -23,5 +30,13 @@ class Composite implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhpType()
+    {
+        return self::PHP_TYPE;
     }
 }

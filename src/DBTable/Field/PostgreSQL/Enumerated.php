@@ -16,6 +16,13 @@ class Enumerated implements Field
     use PropertyTrait;
 
     /**
+     * What kind of PHP type should be expected from a field like this.
+     *
+     * @const
+     */
+    const PHP_TYPE = 'string';
+
+    /**
      * The Enumerated Type this field uses
      *
      * @var string
@@ -183,5 +190,13 @@ SQL;
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhpType()
+    {
+        return self::PHP_TYPE;
     }
 }

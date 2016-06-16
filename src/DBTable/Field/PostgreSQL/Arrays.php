@@ -16,6 +16,13 @@ class Arrays implements Field
     use PropertyTrait;
 
     /**
+     * What kind of PHP type should be expected from a field like this.
+     *
+     * @const
+     */
+    const PHP_TYPE = 'array';
+
+    /**
      * The kind of Field that is allowed in this array
      *
      * @var Field
@@ -46,5 +53,13 @@ class Arrays implements Field
         $this->field = $field;
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhpType()
+    {
+        return self::PHP_TYPE;
     }
 }
