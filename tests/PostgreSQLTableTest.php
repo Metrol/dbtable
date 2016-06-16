@@ -78,62 +78,132 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('primaryKeyID', $keys[0]);
 
         // Test some of the fields that they came out correctly
-        $field = $table->getField('onestring');
+        $field = $table->getField('stringone');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Character', $field);
         $this->assertTrue($field->isNullOk());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertEquals(50, $field->getMaxCharacters());
         $this->assertNull($field->getDefaultValue());
 
-        $field = $table->getField('twostring');
+        $field = $table->getField('stringtwo');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Character', $field);
         $this->assertFalse($field->isNullOk());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertEquals("'ABCDE'::bpchar", $field->getDefaultValue());
         $this->assertEquals(5, $field->getMaxCharacters());
 
-        $field = $table->getField('threestring');
+        $field = $table->getField('stringthree');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Character', $field);
         $this->assertTrue($field->isNullOk());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertEquals("'blah blah'::text", $field->getDefaultValue());
         $this->assertNull($field->getMaxCharacters());
 
-        $field = $table->getField('onenumber');
+        $field = $table->getField('numberone');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
-        $this->assertEquals('onenumber', $field->getName());
+        $this->assertEquals('numberone', $field->getName());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-2147483648, $field->getMin());
         $this->assertEquals(2147483647, $field->getMax());
 
-        $field = $table->getField('twonumber');
+        $field = $table->getField('numbertwo');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
-        $this->assertEquals('twonumber', $field->getName());
+        $this->assertEquals('numbertwo', $field->getName());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-9999.9999, $field->getMin());
         $this->assertEquals(9999.9999, $field->getMax());
 
-        $field = $table->getField('threenumber');
+        $field = $table->getField('numberthree');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
-        $this->assertEquals('threenumber', $field->getName());
+        $this->assertEquals('numberthree', $field->getName());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-9223372036854775808, $field->getMin());
         $this->assertEquals(9223372036854775807, $field->getMax());
 
-        $field = $table->getField('fournumber');
+        $field = $table->getField('numberfour');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
-        $this->assertEquals('fournumber', $field->getName());
+        $this->assertEquals('numberfour', $field->getName());
         $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-32768, $field->getMin());
         $this->assertEquals(32767, $field->getMax());
+
+        $field = $table->getField('numberfive'); // Double precision field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
+        $this->assertEquals('numberfive', $field->getName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('numbersix'); // Money field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
+        $this->assertEquals('numbersix', $field->getName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('numberseven'); // real field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
+        $this->assertEquals('numberseven', $field->getName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('dateone'); // date field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Date', $field);
+        $this->assertEquals('date', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('datetwo'); // Timestamp without a timezone
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Date', $field);
+        $this->assertEquals('timestamp', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('datethree'); // Timestamp with timezone field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Date', $field);
+        $this->assertEquals('timestamptz', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('timeone'); // Time without TZ field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Time', $field);
+        $this->assertEquals('time', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('timetwo'); // Time with TZ field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Time', $field);
+        $this->assertEquals('timetz', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('jsonone'); // JSON field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\JSON', $field);
+        $this->assertEquals('json', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
+
+        $field = $table->getField('xmarkuplang'); // XML field
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\XML', $field);
+        $this->assertEquals('xml', $field->getUdtName());
+        $this->assertFalse($field->isPrimaryKey());
+        $this->assertTrue($field->isNullOk());
+        $this->assertNull($field->getDefaultValue());
 
         $field = $table->getField('yeahnay'); // An enum column
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Enumerated', $field);
