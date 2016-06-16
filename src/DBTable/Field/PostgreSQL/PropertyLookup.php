@@ -183,7 +183,7 @@ class PropertyLookup
                     break;
 
                 case self::T_XML:
-                    $field = $this->newJSONField($fieldDef);
+                    $field = $this->newXMLField($fieldDef);
                     break;
             }
 
