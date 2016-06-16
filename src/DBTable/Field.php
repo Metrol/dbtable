@@ -101,4 +101,11 @@ interface Field
      * @return $this
      */
     public function setUdtName($udtName);
+
+    /**
+     * Provide the PHP type that is exepected out of this field.
+     *
+     * @return string
+     */
+    public function getPhpType();
 }
