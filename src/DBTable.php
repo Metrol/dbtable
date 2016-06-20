@@ -57,6 +57,14 @@ interface DBTable
     public function runFieldLookup(PDO $db);
 
     /**
+     * Checks to see if there are fields already loaded up in this object.
+     * This doesn't check if all the fields are loaded.  Just if any have been.
+     * 
+     * @return boolean
+     */
+    public function isLoaded();
+
+    /**
      * Adds a field object to the Field set for this table
      *
      * @param Field $fields
