@@ -110,6 +110,21 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
+    public function isLoaded()
+    {
+        $rtn = false;
+
+        if ( $this->fields->count() > 0 )
+        {
+            $rtn = true;
+        }
+
+        return $rtn;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function addField(Field $field)
     {
         $this->fields->addField($field);
