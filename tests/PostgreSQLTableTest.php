@@ -64,6 +64,22 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Verify the parts going into the DBTable object are coming out as expected
+     *
+     */
+    public function testTableBasics()
+    {
+        $table = new DBTable\PostgreSQL('pgtable1');
+
+        $this->assertEquals('pgtable1', $table->getName());
+        $this->assertEquals('public', $table->getSchema());
+        $this->assertEquals('public.pgtable1', $table->getFQN());
+        $this->assertEquals('public.pgtable1 alia', $table->getFQN('alia'));
+        $this->assertEquals('"public"."pgtable1"', $table->getFQNQuoted());
+        $this->assertEquals('"public"."pgtable1" "alia"', $table->getFQNQuoted('alia'));
+    }
+
+    /**
      * Investigates a table with a variety of field types and must figure it all
      * out by looking it up in the DB.
      *

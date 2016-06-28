@@ -38,13 +38,23 @@ interface DBTable
 
     /**
      * Provide the Fully Qualified Name of the table ready to be applied
-     * to an SQL statement
+     * to an SQL statement without quotes.
      *
      * @param string $alias Optional alias suffix for the table
      *
      * @return string
      */
     public function getFQN($alias = null);
+
+    /**
+     * Provide the Fully Qualified Name of the table ready to be applied
+     * to an SQL statement complete with the appropriate quotes
+     *
+     * @param string $alias Optional alias suffix for the table
+     *
+     * @return string
+     */
+    public function getFQNQuoted($alias = null);
 
     /**
      * Tells the object to look to the database to define the field properties
@@ -59,7 +69,7 @@ interface DBTable
     /**
      * Checks to see if there are fields already loaded up in this object.
      * This doesn't check if all the fields are loaded.  Just if any have been.
-     * 
+     *
      * @return boolean
      */
     public function isLoaded();

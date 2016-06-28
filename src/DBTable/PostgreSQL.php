@@ -78,20 +78,41 @@ class PostgreSQL implements DBTable
      */
     public function getFQN($alias = null)
     {
-        $rtn = '"';
+        $rtn = '';
 
         if ( !empty($this->schema) )
         {
             $rtn .= $this->schema;
-            $rtn .= '".';
+            $rtn .= '.';
         }
 
         $rtn .= $this->name;
-        $rtn .= '"';
 
         if ( !empty($alias) )
         {
             $rtn .= ' '.$alias;
+        }
+
+        return $rtn;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFQNQuoted($alias = null)
+    {
+        $rtn = '';
+
+        if ( !empty($this->schema) )
+        {
+            $rtn .= '"'.$this->schema.'".';
+        }
+
+        $rtn .= '"'.$this->name.'"';
+
+        if ( !empty($alias) )
+        {
+            $rtn .= ' "'.$alias.'"';
         }
 
         return $rtn;
