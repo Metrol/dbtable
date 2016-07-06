@@ -84,48 +84,23 @@ trait PropertyTrait
     }
 
     /**
-     * @inheritdoc
-     */
-    public function setPrimaryKey($flag)
-    {
-        if ( $flag )
-        {
-            $this->primaryKey = true;
-        }
-        else
-        {
-            $this->primaryKey = false;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isPrimaryKey()
-    {
-        return $this->primaryKey;
-    }
-
-    /**
      *
      * @return string
      */
-    public function getUdtName()
+    public function getDefinedType()
     {
         return $this->udtName;
     }
 
     /**
      *
-     * @param string $udtName
+     * @param string $typeName
      *
      * @return $this
      */
-    public function setUdtName($udtName)
+    public function setDefinedType($typeName)
     {
-        $this->udtName = $udtName;
+        $this->udtName = $typeName;
 
         return $this;
     }
