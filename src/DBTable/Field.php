@@ -73,34 +73,19 @@ interface Field
     public function getDefaultValue();
 
     /**
-     * Sets the flag to mark this field as a primary key
-     *
-     * @param boolean $flag
-     *
-     * @return $this
-     */
-    public function setPrimaryKey($flag);
-
-    /**
-     * Is this field a primary key?
-     *
-     * @return mixed
-     */
-    public function isPrimaryKey();
-
-    /**
+     * Provide the defined type name
      *
      * @return string
      */
-    public function getUdtName();
+    public function getDefinedType();
 
     /**
      *
-     * @param string $udtName
+     * @param string $typeName
      *
      * @return $this
      */
-    public function setUdtName($udtName);
+    public function setDefinedType($typeName);
 
     /**
      * Provide the PHP type that is exepected out of this field.
