@@ -8,9 +8,9 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable\Field;
+use Metrol\DBTable;
 
-class Enumerated implements Field
+class Enumerated implements DBTable\Field, DBTable\FieldValue
 {
     use NameTrait;
     use PropertyTrait;
@@ -44,6 +44,13 @@ class Enumerated implements Field
     private $eVals;
 
     /**
+     * Flag for string value handling
+     *
+     * @var boolean
+     */
+    private $strict;
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -55,6 +62,40 @@ class Enumerated implements Field
         $this->enumType = null;
         $this->schema   = null;
         $this->eVals    = [];
+        $this->strict    = false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStrictValues($flag = true)
+    {
+        if ( $flag )
+        {
+            $this->strict = true;
+        }
+        else
+        {
+            $this->strict = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPHPValue($inputValue)
+    {
+        return $inputValue;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSqlBoundValue($inputValue)
+    {
+        return $inputValue;
     }
 
     /**

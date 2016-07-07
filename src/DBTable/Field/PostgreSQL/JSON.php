@@ -8,9 +8,9 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable\Field;
+use Metrol\DBTable;
 
-class JSON implements Field
+class JSON implements DBTable\Field, DBTable\FieldValue
 {
     use NameTrait;
     use PropertyTrait;
@@ -23,6 +23,13 @@ class JSON implements Field
     const PHP_TYPE = 'array';
 
     /**
+     * Flag for string value handling
+     *
+     * @var boolean
+     */
+    private $strict;
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -30,6 +37,39 @@ class JSON implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStrictValues($flag = true)
+    {
+        if ( $flag )
+        {
+            $this->strict = true;
+        }
+        else
+        {
+            $this->strict = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPHPValue($inputValue)
+    {
+        return $inputValue;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSqlBoundValue($inputValue)
+    {
+        return $inputValue;
     }
 
     /**

@@ -8,9 +8,9 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable\Field;
+use Metrol\DBTable;
 
-class Arrays implements Field
+class Arrays implements DBTable\Field, DBTable\FieldValue
 {
     use NameTrait;
     use PropertyTrait;
@@ -30,6 +30,13 @@ class Arrays implements Field
     private $field;
 
     /**
+     * Flog for string value handling
+     *
+     * @var boolean
+     */
+    private $strict;
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -37,8 +44,41 @@ class Arrays implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
+        $this->strict    = false;
+        $this->field     = null;
+    }
 
-        $this->field = null;
+    /**
+     * @inheritdoc
+     */
+    public function setStrictValues($flag = true)
+    {
+        if ( $flag )
+        {
+            $this->strict = true;
+        }
+        else
+        {
+            $this->strict = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPHPValue($inputValue)
+    {
+        return $inputValue;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSqlBoundValue($inputValue)
+    {
+        return $inputValue;
     }
 
     /**

@@ -64,7 +64,6 @@ class Character implements DBTable\Field, DBTable\FieldValue
             $this->strict = false;
         }
 
-
         return $this;
     }
 
