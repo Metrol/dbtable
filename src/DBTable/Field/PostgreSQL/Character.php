@@ -8,9 +8,9 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable\Field;
+use Metrol\DBTable;
 
-class Character implements Field
+class Character implements DBTable\Field, DBTable\FieldValue
 {
     use NameTrait;
     use PropertyTrait;
@@ -26,9 +26,16 @@ class Character implements Field
      * Maximum number of characters to be allowed in the string.  If null, there
      * is no maximum.
      *
-     * @var integer
+     * @var integer|null
      */
     private $maxVal;
+
+    /**
+     * Flog for string value handling
+     *
+     * @var boolean
+     */
+    private $strict;
 
     /**
      * Instantiate the object and setup the basics
@@ -40,6 +47,113 @@ class Character implements Field
         $this->fieldName = $fieldName;
 
         $this->maxVal = null;
+        $this->strict = false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStrictValues($flag = true)
+    {
+        if ( $flag )
+        {
+            $this->strict = true;
+        }
+        else
+        {
+            $this->strict = false;
+        }
+
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPHPValue($inputValue)
+    {
+        // In strict mode, if null is not okay and the value is null then we
+        // need to throw an error.
+        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        {
+            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+                                      ' to null is not allowed');
+        }
+
+        // When not in strict mode, either keep the null value when its okay or
+        // convert to an empty string when it isn't.
+        if ( $inputValue == null and $this->isNullOk() )
+        {
+            return null;
+        }
+        else if ( $inputValue == null and !$this->isNullOk() )
+        {
+            return '';
+        }
+
+        // Without a max value, no need to check for the string length
+        if ( $this->maxVal == null or $this->maxVal == 0 )
+        {
+            return $inputValue;
+        }
+
+        // Throw an exception when in strict mode and the value is too large
+        if ( $this->strict and strlen($inputValue) > $this->maxVal )
+        {
+            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+                                      ' has too many characters');
+        }
+
+        // If not null, not strict and all that, just make sure to truncate to
+        // the maximum allowed characters
+        $rtn = substr($inputValue, 0, $this->maxVal);
+
+        return $rtn;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSqlBoundValue($inputValue)
+    {
+        // In strict mode, if null is not okay and the value is null then we
+        // need to throw an error.
+        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        {
+            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+                                      ' to null is not allowed');
+        }
+
+        // When not in strict mode, either keep the null value when its okay or
+        // convert to an empty string when it isn't.
+        if ( $inputValue == null and $this->isNullOk() )
+        {
+            return null;
+        }
+        else if ( $inputValue == null and !$this->isNullOk() )
+        {
+            return '';
+        }
+
+        // Without a max value, no need to check for the string length
+        if ( $this->maxVal == null or $this->maxVal == 0 )
+        {
+            return $inputValue;
+        }
+
+        // Throw an exception when in strict mode and the value is too large
+        if ( $this->strict and strlen($inputValue) > $this->maxVal )
+        {
+            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+                                      ' has too many characters');
+        }
+
+        // If not null, not strict and all that, just make sure to truncate to
+        // the maximum allowed characters
+        $rtn = substr($inputValue, 0, $this->maxVal);
+
+        return $rtn;
     }
 
     /**
@@ -62,13 +176,5 @@ class Character implements Field
         $this->maxVal = $maxVal;
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPhpType()
-    {
-        return self::PHP_TYPE;
     }
 }
