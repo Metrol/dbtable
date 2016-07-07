@@ -8,9 +8,9 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable\Field;
+use Metrol\DBTable;
 
-class Integer implements Field
+class Integer implements DBTable\Field, DBTable\FieldValue
 {
     use NameTrait;
     use PropertyTrait;
@@ -65,6 +65,13 @@ class Integer implements Field
     private $minVal;
 
     /**
+     * Flag for string value handling
+     *
+     * @var boolean
+     */
+    private $strict;
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -72,10 +79,153 @@ class Integer implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
-
         $this->precision = self::DEFAULT_PRECISION;
         $this->maxVal    = null;
         $this->minVal    = null;
+        $this->strict    = false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStrictValues($flag = true)
+    {
+        if ( $flag )
+        {
+            $this->strict = true;
+        }
+        else
+        {
+            $this->strict = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPHPValue($inputValue)
+    {
+        // In strict mode, if null is not okay and the value is null then we
+        // need to throw an error.
+        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        {
+            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+                                      ' to null is not allowed');
+        }
+
+        // When not in strict mode, either keep the null value when its okay or
+        // convert to a 0 when it isn't
+        if ( $inputValue == null and $this->isNullOk() )
+        {
+            return null;
+        }
+        else if ( $inputValue == null and !$this->isNullOk() )
+        {
+            return 0;
+        }
+
+        // Throw an exception when in strict mode and the value is too large
+        if ( $this->strict )
+        {
+            if ( $inputValue != intval($inputValue) )
+            {
+                throw new \RangeException('Setting PHP value of ' .
+                                          $this->fieldName .
+                                          ' is not an integer');
+            }
+
+            if ( $inputValue < $this->getMin() or $inputValue > $this->getMax() )
+            {
+                throw new \RangeException('Setting PHP value of ' .
+                                          $this->fieldName .
+                                          ' is outside of what is allowed');
+            }
+        }
+
+        // No strict mode issues, no null issues... go ahead and make sure this
+        // value is an integer
+        $rtn = intval($inputValue);
+
+        // If things are out of range at this point, reset the value to 0 or
+        // null depending on which is allowed
+        if ( $rtn < $this->getMin() or $rtn > $this->getMax() )
+        {
+            if ( $this->isNullOk() )
+            {
+                $rtn = null;
+            }
+            else
+            {
+                $rtn = 0;
+            }
+        }
+
+        return $rtn;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSqlBoundValue($inputValue)
+    {
+        // In strict mode, if null is not okay and the value is null then we
+        // need to throw an error.
+        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        {
+            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+                                      ' to null is not allowed');
+        }
+
+        // When not in strict mode, either keep the null value when its okay or
+        // convert to a 0 when it isn't
+        if ( $inputValue == null and $this->isNullOk() )
+        {
+            return null;
+        }
+        else if ( $inputValue == null and !$this->isNullOk() )
+        {
+            return 0;
+        }
+
+        // Throw an exception when in strict mode and the value is too large
+        if ( $this->strict )
+        {
+            if ( $inputValue != intval($inputValue) )
+            {
+                throw new \RangeException('Setting SQL value of ' .
+                                          $this->fieldName .
+                                          ' is not an integer');
+            }
+
+            if ( $inputValue < $this->getMin() or $inputValue > $this->getMax() )
+            {
+                throw new \RangeException('Setting SQL value of ' .
+                                          $this->fieldName .
+                                          ' is outside of what is allowed');
+            }
+        }
+
+        // No strict mode issues, no null issues... go ahead and make sure this
+        // value is an integer
+        $rtn = intval($inputValue);
+
+        // If things are out of range at this point, reset the value to 0 or
+        // null depending on which is allowed
+        if ( $rtn < $this->getMin() or $rtn > $this->getMax() )
+        {
+            if ( $this->isNullOk() )
+            {
+                $rtn = null;
+            }
+            else
+            {
+                $rtn = 0;
+            }
+        }
+
+        return $rtn;
     }
 
     /**
