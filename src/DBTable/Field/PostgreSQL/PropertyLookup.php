@@ -361,7 +361,7 @@ class PropertyLookup
     private function setProperties(DBTable\Field $field, \stdClass $fieldDef)
     {
         // Set the generic field type pulled from the DB into the Field.
-        $field->setUdtName( $fieldDef->udt_name );
+        $field->setDefinedType( $fieldDef->udt_name );
 
         // Is NULL an acceptable value
         if ( $fieldDef->is_nullable == 'YES' )
@@ -378,17 +378,6 @@ class PropertyLookup
         if ( $fieldDef->column_default !== null )
         {
             $field->setDefaultValue($fieldDef->column_default);
-        }
-
-        // If the Field has been noted as a primary key in the Table object,
-        // then set the flag in the Field itself.
-        if ( in_array($field->getName(), $this->table->getPrimaryKeys()) )
-        {
-            $field->setPrimaryKey(true);
-        }
-        else
-        {
-            $field->setPrimaryKey(false);
         }
     }
 

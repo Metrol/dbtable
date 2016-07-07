@@ -97,7 +97,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('stringone');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Character', $field);
         $this->assertTrue($field->isNullOk());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertEquals(50, $field->getMaxCharacters());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('string', $field->getPhpType());
@@ -105,7 +104,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('stringtwo');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Character', $field);
         $this->assertFalse($field->isNullOk());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertEquals("'ABCDE'::bpchar", $field->getDefaultValue());
         $this->assertEquals(5, $field->getMaxCharacters());
         $this->assertEquals('string', $field->getPhpType());
@@ -113,7 +111,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('stringthree');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Character', $field);
         $this->assertTrue($field->isNullOk());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertEquals("'blah blah'::text", $field->getDefaultValue());
         $this->assertNull($field->getMaxCharacters());
         $this->assertEquals('string', $field->getPhpType());
@@ -121,7 +118,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numberone');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
         $this->assertEquals('numberone', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-2147483648, $field->getMin());
@@ -131,7 +127,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numbertwo');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
         $this->assertEquals('numbertwo', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-9999.9999, $field->getMin());
@@ -141,7 +136,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numberthree');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
         $this->assertEquals('numberthree', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-9223372036854775808, $field->getMin());
@@ -151,7 +145,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numberfour');
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
         $this->assertEquals('numberfour', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals(-32768, $field->getMin());
@@ -161,7 +154,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numberfive'); // Double precision field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
         $this->assertEquals('numberfive', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('float', $field->getPhpType());
@@ -169,7 +161,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numbersix'); // Money field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
         $this->assertEquals('numbersix', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('float', $field->getPhpType());
@@ -177,63 +168,55 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('numberseven'); // real field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Numeric', $field);
         $this->assertEquals('numberseven', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('float', $field->getPhpType());
 
         $field = $table->getField('dateone'); // date field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Date', $field);
-        $this->assertEquals('date', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('date', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('\DateTime', $field->getPhpType());
 
         $field = $table->getField('datetwo'); // Timestamp without a timezone
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Date', $field);
-        $this->assertEquals('timestamp', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('timestamp', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('\DateTime', $field->getPhpType());
 
         $field = $table->getField('datethree'); // Timestamp with timezone field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Date', $field);
-        $this->assertEquals('timestamptz', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('timestamptz', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('\DateTime', $field->getPhpType());
 
         $field = $table->getField('timeone'); // Time without TZ field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Time', $field);
-        $this->assertEquals('time', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('time', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('\DateTime', $field->getPhpType());
 
         $field = $table->getField('timetwo'); // Time with TZ field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Time', $field);
-        $this->assertEquals('timetz', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('timetz', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('\DateTime', $field->getPhpType());
 
         $field = $table->getField('jsonone'); // JSON field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\JSON', $field);
-        $this->assertEquals('json', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('json', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('array', $field->getPhpType());
 
         $field = $table->getField('xmarkuplang'); // XML field
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\XML', $field);
-        $this->assertEquals('xml', $field->getUdtName());
-        $this->assertFalse($field->isPrimaryKey());
+        $this->assertEquals('xml', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('string', $field->getPhpType());
@@ -249,7 +232,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField('trueorfalse'); // Boolean
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Boolean', $field);
         $this->assertEquals('trueorfalse', $field->getName());
-        $this->assertFalse($field->isPrimaryKey());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
         $this->assertEquals('bool', $field->getPhpType());
@@ -258,7 +240,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $field = $table->getField( $table->getPrimaryKeys()[0] );
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
         $this->assertEquals('primaryKeyID', $field->getName());
-        $this->assertTrue($field->isPrimaryKey());
         $this->assertEquals('integer', $field->getPhpType());
     }
 }
