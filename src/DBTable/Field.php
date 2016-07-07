@@ -86,11 +86,4 @@ interface Field
      * @return $this
      */
     public function setDefinedType($typeName);
-
-    /**
-     * Provide the PHP type that is exepected out of this field.
-     *
-     * @return string
-     */
-    public function getPhpType();
 }
