@@ -33,6 +33,8 @@ interface FieldValue
      * @param mixed $inputValue
      *
      * @return mixed
+     *
+     * @throws \RangeException
      */
     public function getPHPValue($inputValue);
 
@@ -46,6 +48,8 @@ interface FieldValue
      * @param mixed $inputValue
      *
      * @return mixed
+     *
+     * @throws \RangeException
      */
     public function getSqlBoundValue($inputValue);
 }
