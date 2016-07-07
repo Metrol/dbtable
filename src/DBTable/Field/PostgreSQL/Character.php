@@ -31,7 +31,7 @@ class Character implements DBTable\Field, DBTable\FieldValue
     private $maxVal;
 
     /**
-     * Flog for string value handling
+     * Flag for string value handling
      *
      * @var boolean
      */
