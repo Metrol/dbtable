@@ -44,7 +44,55 @@ class Boolean implements Field
      */
     public function getPHPValue($inputValue)
     {
-        return $inputValue;
+        $rtn = false; // Default value if nothing else can manage to set
+
+        // When the value is already boolean, keep it that way
+        if ( $inputValue === true or $inputValue === false )
+        {
+            return $inputValue;
+        }
+
+        // PostgreSQL will always have a t or f as the value for true/false
+        // Also check for the value of 'true' or 'false' as a string
+        if ( strtolower($inputValue) === 't' or strtolower($inputValue) === 'true' )
+        {
+            return true;
+        }
+
+        if ( strtolower($inputValue) === 'f' or strtolower($inputValue) === 'false' )
+        {
+            return false;
+        }
+
+        // In strict mode, if null is not okay and the value is null then we
+        // need to throw an error.
+        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        {
+            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+                                      ' to null is not allowed');
+        }
+
+        // When not in strict mode, either keep the null value when its okay or
+        // convert to a false if it isn't
+        if ( $inputValue == null and $this->isNullOk() )
+        {
+            return null;
+        }
+        else if ( $inputValue == null and !$this->isNullOk() )
+        {
+            return $rtn;
+        }
+
+        // If we actually made it this far, default to PHP handling of boolean
+        // logic to figure this out.
+        if ( $inputValue )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
@@ -52,6 +100,20 @@ class Boolean implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        return $inputValue;
+        $phpVal = $this->getPHPValue($inputValue);
+
+        if ( $phpVal === null )
+        {
+            return null;
+        }
+
+        if ( $phpVal === true )
+        {
+            return 'true';
+        }
+        else
+        {
+            return 'false';
+        }
     }
 }
