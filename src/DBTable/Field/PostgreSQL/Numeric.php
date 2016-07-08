@@ -59,7 +59,7 @@ class Numeric implements Field
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
             throw new \RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -67,11 +67,11 @@ class Numeric implements Field
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to a 0 when it isn't
-        if ( $inputValue == null and $this->isNullOk() )
+        if ( $inputValue === null and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue == null and !$this->isNullOk() )
+        else if ( $inputValue === null and !$this->isNullOk() )
         {
             return 0;
         }
@@ -115,7 +115,7 @@ class Numeric implements Field
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
             throw new \RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -123,11 +123,11 @@ class Numeric implements Field
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to a 0 when it isn't
-        if ( $inputValue == null and $this->isNullOk() )
+        if ( $inputValue === null and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue == null and !$this->isNullOk() )
+        else if ( $inputValue === null and !$this->isNullOk() )
         {
             return 0;
         }
