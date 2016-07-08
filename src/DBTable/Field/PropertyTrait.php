@@ -6,9 +6,7 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-namespace Metrol\DBTable\Field\PostgreSQL;
-
-use Metrol\DBTable\Field;
+namespace Metrol\DBTable\Field;
 
 trait PropertyTrait
 {
