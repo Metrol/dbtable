@@ -44,7 +44,7 @@ class Set implements \Iterator, \Countable
     {
         $rtn = null;
 
-        if ( isset($this->fields[$fieldName]) )
+        if ( $this->fieldExists($fieldName) )
         {
             $rtn = $this->fields[$fieldName];
         }
@@ -64,6 +64,25 @@ class Set implements \Iterator, \Countable
         $this->fields[$field->getName()] = $field;
 
         return $this;
+    }
+
+    /**
+     * Checks to see if the specified field exists
+     *
+     * @param string $fieldName
+     *
+     * @return boolean
+     */
+    public function fieldExists($fieldName)
+    {
+        $rtn = false;
+
+        if ( isset($this->fields[$fieldName]) )
+        {
+            $rtn = true;
+        }
+
+        return $rtn;
     }
 
     /**

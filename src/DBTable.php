@@ -100,6 +100,15 @@ interface DBTable
     public function getFields();
 
     /**
+     * Checks to see if the specified field exists
+     *
+     * @param string $fieldName
+     *
+     * @return boolean
+     */
+    public function fieldExists($fieldName);
+
+   /**
      * Set which fields are primary keys for the table.
      *
      * @param string[] $primaryKeyFields

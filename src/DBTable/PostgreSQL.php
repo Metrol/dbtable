@@ -164,6 +164,14 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
+    public function fieldExists($fieldName)
+    {
+        return $this->fields->fieldExists($fieldName);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getFields()
     {
         return $this->fields;
