@@ -47,10 +47,10 @@ trait NameTrait
 
         if ( ! empty($tableAlias) )
         {
-            $rtn .= '"' . $tableAlias . '".';
+            $rtn .= $tableAlias . '.';
         }
 
-        $rtn .= '"' . $this->fieldName . '"';
+        $rtn .= $this->fieldName;
 
         return $rtn;
     }

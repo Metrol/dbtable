@@ -32,7 +32,7 @@ interface Field
 
     /**
      * Provide the Fully Qualified Name of the field ready to be applied
-     * to an SQL statement
+     * to an SQL binding
      *
      * @param  string $tableAlias Puts the table alias on the field name
      *
