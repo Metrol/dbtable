@@ -8,12 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable;
+use Metrol\DBTable\Field;
 
-class Character implements DBTable\Field, DBTable\FieldValue
+class Character implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -31,13 +30,6 @@ class Character implements DBTable\Field, DBTable\FieldValue
     private $maxVal;
 
     /**
-     * Flag for string value handling
-     *
-     * @var boolean
-     */
-    private $strict;
-
-    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -47,24 +39,6 @@ class Character implements DBTable\Field, DBTable\FieldValue
         $this->fieldName = $fieldName;
 
         $this->maxVal = null;
-        $this->strict = false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStrictValues($flag = true)
-    {
-        if ( $flag )
-        {
-            $this->strict = true;
-        }
-        else
-        {
-            $this->strict = false;
-        }
-
-        return $this;
     }
 
     /**

@@ -12,8 +12,7 @@ use Metrol\DBTable\Field;
 
 class XML implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -35,9 +34,16 @@ class XML implements Field
     /**
      * @inheritdoc
      */
-    public function getPhpType()
+    public function getPHPValue($inputValue)
     {
-        return self::PHP_TYPE;
+        return $inputValue;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getSqlBoundValue($inputValue)
+    {
+        return $inputValue;
+    }
 }

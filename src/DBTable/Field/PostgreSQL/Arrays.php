@@ -8,12 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable;
+use Metrol\DBTable\Field;
 
-class Arrays implements DBTable\Field, DBTable\FieldValue
+class Arrays implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -30,13 +29,6 @@ class Arrays implements DBTable\Field, DBTable\FieldValue
     private $field;
 
     /**
-     * Flog for string value handling
-     *
-     * @var boolean
-     */
-    private $strict;
-
-    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -44,25 +36,7 @@ class Arrays implements DBTable\Field, DBTable\FieldValue
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
-        $this->strict    = false;
         $this->field     = null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStrictValues($flag = true)
-    {
-        if ( $flag )
-        {
-            $this->strict = true;
-        }
-        else
-        {
-            $this->strict = false;
-        }
-
-        return $this;
     }
 
     /**
@@ -93,13 +67,5 @@ class Arrays implements DBTable\Field, DBTable\FieldValue
         $this->field = $field;
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPhpType()
-    {
-        return self::PHP_TYPE;
     }
 }

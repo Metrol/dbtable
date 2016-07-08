@@ -8,19 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable;
+use Metrol\DBTable\Field;
 
-class Network implements DBTable\Field, DBTable\FieldValue
+class Network implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
-
-    /**
-     * Flag for string value handling
-     *
-     * @var boolean
-     */
-    private $strict;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * Instantiate the object and setup the basics
@@ -30,24 +22,6 @@ class Network implements DBTable\Field, DBTable\FieldValue
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
-        $this->strict    = false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStrictValues($flag = true)
-    {
-        if ( $flag )
-        {
-            $this->strict = true;
-        }
-        else
-        {
-            $this->strict = false;
-        }
-
-        return $this;
     }
 
     /**

@@ -8,12 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable;
+use Metrol\DBTable\Field;
 
-class Boolean implements DBTable\Field, DBTable\FieldValue
+class Boolean implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -38,23 +37,6 @@ class Boolean implements DBTable\Field, DBTable\FieldValue
     {
         $this->fieldName = $fieldName;
         $this->strict    = false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStrictValues($flag = true)
-    {
-        if ( $flag )
-        {
-            $this->strict = true;
-        }
-        else
-        {
-            $this->strict = false;
-        }
-
-        return $this;
     }
 
     /**

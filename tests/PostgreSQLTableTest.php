@@ -232,10 +232,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $table = new DBTable\PostgreSQL('pgtable1');
         $table->runFieldLookup($this->db);
 
-        /**
-         * @var DBTable\FieldValue $field
-         */
-
         // Field should only allow 50 characters
         $field = $table->getField('stringone');
 

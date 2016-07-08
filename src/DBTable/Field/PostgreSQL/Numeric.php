@@ -16,8 +16,7 @@ use Metrol\DBTable\Field;
  */
 class Numeric implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -41,13 +40,6 @@ class Numeric implements Field
     protected $scale;
 
     /**
-     * Flog for string value handling
-     *
-     * @var boolean
-     */
-    private $strict;
-
-    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -58,24 +50,6 @@ class Numeric implements Field
 
         $this->precision = null;
         $this->scale     = null;
-        $this->strict    = false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStrictValues($flag = true)
-    {
-        if ( $flag )
-        {
-            $this->strict = true;
-        }
-        else
-        {
-            $this->strict = false;
-        }
-
-        return $this;
     }
 
     /**
@@ -256,13 +230,5 @@ class Numeric implements Field
         $min = $max * -1;
 
         return $min;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPhpType()
-    {
-        return self::PHP_TYPE;
     }
 }

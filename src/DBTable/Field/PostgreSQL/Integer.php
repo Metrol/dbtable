@@ -8,12 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use Metrol\DBTable;
+use Metrol\DBTable\Field;
 
-class Integer implements DBTable\Field, DBTable\FieldValue
+class Integer implements Field
 {
-    use NameTrait;
-    use PropertyTrait;
+    use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -65,13 +64,6 @@ class Integer implements DBTable\Field, DBTable\FieldValue
     private $minVal;
 
     /**
-     * Flag for string value handling
-     *
-     * @var boolean
-     */
-    private $strict;
-
-    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -82,24 +74,6 @@ class Integer implements DBTable\Field, DBTable\FieldValue
         $this->precision = self::DEFAULT_PRECISION;
         $this->maxVal    = null;
         $this->minVal    = null;
-        $this->strict    = false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStrictValues($flag = true)
-    {
-        if ( $flag )
-        {
-            $this->strict = true;
-        }
-        else
-        {
-            $this->strict = false;
-        }
-
-        return $this;
     }
 
     /**
@@ -276,13 +250,4 @@ class Integer implements DBTable\Field, DBTable\FieldValue
 
         return $this;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPhpType()
-    {
-        return self::PHP_TYPE;
-    }
-
 }
