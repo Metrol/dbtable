@@ -91,11 +91,11 @@ class Integer implements Field
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to a 0 when it isn't
-        if ( $inputValue == null and $this->isNullOk() )
+        if ( $inputValue === null and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue == null and !$this->isNullOk() )
+        else if ( $inputValue === null and !$this->isNullOk() )
         {
             return 0;
         }

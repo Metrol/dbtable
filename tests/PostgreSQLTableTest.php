@@ -273,4 +273,28 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2016-07-04', $field->getSqlBoundValue($fldObj));
         $this->assertEquals('2016-07-04', $field->getSqlBoundValue($testDate));
     }
+
+    /**
+     * Tests the field validation for integers
+     *
+     */
+    public function testIntegerFieldValidation()
+    {
+        $table = new DBTable\PostgreSQL('pgtable1');
+        $table->runFieldLookup($this->db);
+
+        $field = $table->getField('numberfour');
+
+        $testVal  = 1;
+        $expected = 1;
+        $this->assertEquals($expected, $field->getPHPValue($testVal));
+
+        $testVal  = 1.123;
+        $expected = 1;
+        $this->assertEquals($expected, $field->getPHPValue($testVal));
+
+        $testVal  = 0;
+        $expected = 0;
+        $this->assertEquals($expected, $field->getPHPValue($testVal));
+    }
 }
