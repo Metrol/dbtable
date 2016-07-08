@@ -222,4 +222,28 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Integer', $field);
         $this->assertEquals('primaryKeyID', $field->getName());
     }
+
+    /**
+     * Tests the field validation routines
+     *
+     */
+    public function testFieldValidation()
+    {
+        $table = new DBTable\PostgreSQL('pgtable1');
+        $table->runFieldLookup($this->db);
+
+        /**
+         * @var DBTable\FieldValue $field
+         */
+
+        // Field should only allow 50 characters
+        $field = $table->getField('stringone');
+
+        $testStr = str_repeat('x', 56);
+        $this->assertEquals(56, strlen($testStr));
+        $cleanStr = $field->getPHPValue($testStr);
+        $this->assertEquals(50, strlen($cleanStr));
+        $cleanStr = $field->getSqlBoundValue($testStr);
+        $this->assertEquals(50, strlen($cleanStr));
+    }
 }
