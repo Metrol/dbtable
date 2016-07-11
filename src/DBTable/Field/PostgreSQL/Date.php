@@ -96,6 +96,11 @@ class Date implements Field
     {
         $dateObj = $this->getPHPValue($inputValue);
 
+        if ( $dateObj === null )
+        {
+            return null;
+        }
+
         $fmt = self::FMT_DATE;
 
         switch ( $this->getDefinedType() )
