@@ -15,6 +15,13 @@ class Network implements Field
     use Field\NameTrait, Field\PropertyTrait, Field\StrictModeTrait;
 
     /**
+     * What kind of PHP type should be expected from a field like this.
+     *
+     * @const
+     */
+    const PHP_TYPE = 'string';
+
+    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
