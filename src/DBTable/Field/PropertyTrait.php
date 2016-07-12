@@ -102,4 +102,21 @@ trait PropertyTrait
 
         return $this;
     }
+
+    /**
+     * Provide the PHP Type for this object based on the class constant
+     *
+     * @return string
+     */
+    public function getPhpType()
+    {
+        $rtn = '';
+
+        if ( defined('self::PHP_TYPE') )
+        {
+            $rtn = self::PHP_TYPE;
+        }
+
+        return $rtn;
+    }
 }
