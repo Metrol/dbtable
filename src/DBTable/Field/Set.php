@@ -98,7 +98,7 @@ class Set implements \Iterator, \Countable
         foreach ( $this as $field )
         {
             $out .= ' * @property ';
-            $out .= $field->getPhpType();
+            $out .= $field->getPHPType();
             $out .= ' $'.$field->getName();
             $out .= PHP_EOL;
         }

@@ -124,4 +124,11 @@ interface Field
      * @throws \RangeException
      */
     public function getSqlBoundValue($inputValue);
+    
+    /**
+     * Produce the PHP type that can be used in a properties tag for a docBlock
+     * 
+     * @return string
+     */
+    public function getPHPType();
 }
