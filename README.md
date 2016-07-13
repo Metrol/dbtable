@@ -44,11 +44,6 @@ $maxValue = $indexField->getMax();
 
 These are just a few of the early examples.  Each major field type is given it's own class to provide all the information you would need to know what is and is not allowed to go into it at run time.
 
-## What this does not do (and never will)
-There's no attempt to try to work through triggers or any database initiated validations.  Just looking at the basics here.  The complexity and load wouldn't be worth the efforts.
-
-This library does not work directly with any of the values that will be stored in a table.  Instead, this is meant to assist other classes that do handle values.
-
 ## Status
 Things are still pretty raw at the moment.  Not ready for production as of 15Jun2016.
 
