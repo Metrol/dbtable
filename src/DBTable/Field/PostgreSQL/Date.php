@@ -10,6 +10,7 @@ namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
 use DateTime;
+use DateTimeZone;
 
 class Date implements Field
 {
@@ -23,6 +24,8 @@ class Date implements Field
     const FMT_DATE        = 'Y-m-d';
     const FMT_DATETIME    = 'Y-m-d H:i:s';
     const FMT_DATETIME_TZ = 'Y-m-d H:i:s T';
+
+    const DEF_TIMEZONE    = 'UTC';
 
     /**
      * What kind of PHP type should be expected from a field like this.
@@ -84,7 +87,16 @@ class Date implements Field
             }
         }
 
-        $dateObj = new DateTime( $inputValue );
+        if ( $this->getDefinedType() == PropertyLookup::T_TIMESTAMP )
+        {
+            // When the time zone isn't specified by the DB, force it to UTC
+            $timeZone = new DateTimeZone(self::DEF_TIMEZONE);
+            $dateObj  = new DateTime($inputValue, $timeZone);
+        }
+        else
+        {
+            $dateObj = new DateTime($inputValue);
+        }
 
         return $dateObj;
     }
