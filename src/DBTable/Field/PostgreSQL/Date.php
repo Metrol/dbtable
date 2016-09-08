@@ -87,7 +87,7 @@ class Date implements Field
             }
         }
 
-        if ( $this->getDefinedType() == PropertyLookup::T_TIMESTAMP )
+        if ( $this->getDefinedType() == 'timestamp' )
         {
             // When the time zone isn't specified by the DB, force it to UTC
             $timeZone = new DateTimeZone(self::DEF_TIMEZONE);
