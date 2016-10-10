@@ -22,13 +22,6 @@ class Boolean implements Field
     const PHP_TYPE = 'bool';
 
     /**
-     * Flag for string value handling
-     *
-     * @var boolean
-     */
-    private $strict;
-
-    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -36,7 +29,6 @@ class Boolean implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
-        $this->strict    = false;
     }
 
     /**
