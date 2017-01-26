@@ -42,7 +42,7 @@ class PropertyLookup
     const T_ENUM         = 'enum';
     const T_DATE         = 'date';
     const T_TIMESTAMP_TZ = 'timestamp with time zone';
-    const T_TIMESTAMP    = 'timestamp without time zone';
+    const T_TIMESTAMP    = 'timestamp';
     const T_TIME_TZ      = 'time with time zone';
     const T_TIME         = 'time without time zone';
     const T_JSON         = 'json';
