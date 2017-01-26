@@ -125,6 +125,10 @@ class Date implements Field
                 $fmt = self::FMT_DATETIME;
                 break;
 
+            case 'timestamp':
+                $fmt = self::FMT_DATETIME;
+                break;
+
             case PropertyLookup::T_TIMESTAMP_TZ:
                 $fmt = self::FMT_DATETIME_TZ;
                 break;
