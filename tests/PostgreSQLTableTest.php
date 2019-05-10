@@ -9,7 +9,6 @@
 namespace Metrol;
 
 use PDO;
-use Metrol\DBTable;
 
 /**
  * Test the PostgreSQL table and field objects
