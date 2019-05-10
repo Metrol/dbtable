@@ -8,9 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
+use Exception;
 use Metrol\DBTable\Field;
 use DateTime;
 use DateTimeZone;
+use RangeException;
 
 class Date implements Field
 {
@@ -53,6 +55,9 @@ class Date implements Field
      * @param string|DateTime $inputValue
      *
      * @return DateTime
+     *
+     * @throws Exception
+     * @throws RangeException
      */
     public function getPHPValue($inputValue)
     {
@@ -60,7 +65,7 @@ class Date implements Field
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue == null )
         {
-            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+            throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 

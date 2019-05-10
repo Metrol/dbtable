@@ -8,6 +8,8 @@
 
 namespace Metrol\DBTable\Field;
 
+use Countable;
+use Iterator;
 use \Metrol\DBTable\Field;
 
 /**
@@ -15,14 +17,14 @@ use \Metrol\DBTable\Field;
  * determine what kind of structure it has.
  *
  */
-class Set implements \Iterator, \Countable
+class Set implements Iterator, Countable
 {
     /**
      * The fields being stored, keyed by the name of the field
      *
      * @var Field[]
      */
-    protected $fields;
+    protected $fields = [];
 
     /**
      * Instantiate the object and store the sample DB Item as a reference
@@ -30,7 +32,7 @@ class Set implements \Iterator, \Countable
      */
     public function __construct()
     {
-        $this->fields = array();
+
     }
 
     /**

@@ -8,6 +8,8 @@
 
 namespace Metrol\DBTable;
 
+use RangeException;
+
 /**
  * Every field in a table needs to be able to support this interface.
  *
@@ -106,7 +108,7 @@ interface Field
      *
      * @return mixed
      *
-     * @throws \RangeException
+     * @throws RangeException
      */
     public function getPHPValue($inputValue);
 
@@ -121,13 +123,13 @@ interface Field
      *
      * @return mixed
      *
-     * @throws \RangeException
+     * @throws RangeException
      */
     public function getSqlBoundValue($inputValue);
-    
+
     /**
      * Produce the PHP type that can be used in a properties tag for a docBlock
-     * 
+     *
      * @return string
      */
     public function getPHPType();

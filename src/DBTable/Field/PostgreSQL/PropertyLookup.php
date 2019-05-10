@@ -11,6 +11,7 @@ namespace Metrol\DBTable\Field\PostgreSQL;
 use PDO;
 use Metrol\DBTable;
 use Metrol\DBTable\Field\PostgreSQL as Fld;
+use stdClass;
 
 /**
  * Used by the PostgreSQL Table class to lookup all the details about the
@@ -47,6 +48,7 @@ class PropertyLookup
     const T_TIME         = 'time without time zone';
     const T_JSON         = 'json';
     const T_XML          = 'xml';
+    const T_POINT        = 'point';
 
     /**
      * The database connection to use for the lookup
@@ -96,7 +98,7 @@ class PropertyLookup
      * Takes the field information that has been passed in and creates Field
      * objects that are then passed into the Table object
      *
-     * @param \stdClass[] $fieldDefList
+     * @param stdClass[] $fieldDefList
      */
     private function populateFieldsIntoTable(array $fieldDefList)
     {
@@ -185,6 +187,10 @@ class PropertyLookup
                 case self::T_XML:
                     $field = $this->newXMLField($fieldDef);
                     break;
+
+                case self::T_POINT:
+                    $field = $this->newPointField($fieldDef);
+                    break;
             }
 
             if ( $field != null )
@@ -197,11 +203,11 @@ class PropertyLookup
     /**
      * Generate a new Integer field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newIntegerField(\stdClass $fieldDef)
+    private function newIntegerField(stdClass $fieldDef)
     {
         $field = new Fld\Integer($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -213,11 +219,11 @@ class PropertyLookup
     /**
      * Generate a new Numeric field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newNumericField(\stdClass $fieldDef)
+    private function newNumericField(stdClass $fieldDef)
     {
         $field = new Fld\Numeric($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -230,11 +236,11 @@ class PropertyLookup
     /**
      * Generate a new Character field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newCharacterField(\stdClass $fieldDef)
+    private function newCharacterField(stdClass $fieldDef)
     {
         $field = new Fld\Character($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -247,11 +253,11 @@ class PropertyLookup
     /**
      * Generate a new Array field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newArrayField(\stdClass $fieldDef)
+    private function newArrayField(stdClass $fieldDef)
     {
         $field = new Fld\Arrays($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -262,11 +268,11 @@ class PropertyLookup
     /**
      * Generate a new Boolean field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newBooleanField(\stdClass $fieldDef)
+    private function newBooleanField(stdClass $fieldDef)
     {
         $field = new Fld\Boolean($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -277,11 +283,11 @@ class PropertyLookup
     /**
      * Generate a new JSON field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newJSONField(\stdClass $fieldDef)
+    private function newJSONField(stdClass $fieldDef)
     {
         $field = new Fld\JSON($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -292,11 +298,11 @@ class PropertyLookup
     /**
      * Generate a new XML field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newXMLField(\stdClass $fieldDef)
+    private function newXMLField(stdClass $fieldDef)
     {
         $field = new Fld\XML($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -305,13 +311,28 @@ class PropertyLookup
     }
 
     /**
-     * Generate a new Date field
+     * Generate a new Point field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newDateField(\stdClass $fieldDef)
+    private function newPointField(stdClass $fieldDef)
+    {
+        $field = new Fld\Point($fieldDef->column_name);
+        $this->setProperties($field, $fieldDef);
+
+        return $field;
+    }
+
+    /**
+     * Generate a new Date field
+     *
+     * @param stdClass $fieldDef
+     *
+     * @return DBTable\Field
+     */
+    private function newDateField(stdClass $fieldDef)
     {
         $field = new Fld\Date($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -322,11 +343,11 @@ class PropertyLookup
     /**
      * Generate a new Time field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newTimeField(\stdClass $fieldDef)
+    private function newTimeField(stdClass $fieldDef)
     {
         $field = new Fld\Time($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -337,11 +358,11 @@ class PropertyLookup
     /**
      * Generate a new Enumerated field
      *
-     * @param \stdClass $fieldDef
+     * @param stdClass $fieldDef
      *
      * @return DBTable\Field
      */
-    private function newEnumeratedField(\stdClass $fieldDef)
+    private function newEnumeratedField(stdClass $fieldDef)
     {
         $field = new Fld\Enumerated($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -356,9 +377,9 @@ class PropertyLookup
      * Sets some of the basic field properties that every field shares
      *
      * @param DBTable\Field $field
-     * @param \stdClass     $fieldDef
+     * @param stdClass     $fieldDef
      */
-    private function setProperties(DBTable\Field $field, \stdClass $fieldDef)
+    private function setProperties(DBTable\Field $field, stdClass $fieldDef)
     {
         // Set the generic field type pulled from the DB into the Field.
         $field->setDefinedType( $fieldDef->udt_name );
