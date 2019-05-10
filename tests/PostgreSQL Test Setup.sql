@@ -23,6 +23,12 @@ SUBTYPE_OPCLASS=date_ops);
 ALTER TYPE "DateRange"
 OWNER TO testuser;
 
+CREATE TYPE "YesNo" AS ENUM
+    ('Yes',
+        'No');
+ALTER TYPE "YesNo"
+    OWNER TO testuser;
+
 CREATE TYPE "DatesAnswer" AS
 (dt_rng "DateRange",
  ans "YesNo",
@@ -30,11 +36,6 @@ CREATE TYPE "DatesAnswer" AS
 ALTER TYPE "DatesAnswer"
 OWNER TO testuser;
 
-CREATE TYPE "YesNo" AS ENUM
-('Yes',
-    'No');
-ALTER TYPE "YesNo"
-OWNER TO testuser;
 
 CREATE TABLE pgtable1
 (
@@ -58,6 +59,7 @@ CREATE TABLE pgtable1
     xmarkuplang xml,
     yeahnay "YesNo",
     trueorfalse boolean,
+    xypoint point,
     CONSTRAINT pgtable1_pkey PRIMARY KEY ("primaryKeyID")
 )
 WITH (
