@@ -25,6 +25,13 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
     const DB_CREDENTIALS = 'etc/db.ini';
 
     /**
+     * The table used for testing
+     *
+     * @const string
+     */
+    const TABLE_NAME = 'pgtable1';
+
+    /**
      * The database to perform tests on
      *
      * @var PDO
@@ -64,7 +71,7 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
             exit;
         }
 
-        $this->table = new DBTable\PostgreSQL('pgtable1');
+        $this->table = new DBTable\PostgreSQL(self::TABLE_NAME);
         $this->table->runFieldLookup($this->db);
     }
 
