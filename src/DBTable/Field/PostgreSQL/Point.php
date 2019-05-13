@@ -78,7 +78,7 @@ class Point implements Field
      *
      * @param array $inputValue
      *
-     * @return string|null
+     * @return Field\Value|null
      *
      * @throws RangeException
      */
@@ -98,7 +98,14 @@ class Point implements Field
             $x = floatval($x);
             $y = floatval($y);
 
-            $rtn = '('. $x . ', ' . $y . ')';
+            $xKey = uniqid(':');
+            $yKey = uniqid(':');
+
+            $rtn = new Field\Value;
+
+            $rtn->setSqlString( 'point('. $xKey .','. $yKey .')' )
+                ->addBinding($xKey, $x)
+                ->addBinding($yKey, $y);
         }
         else
         {
