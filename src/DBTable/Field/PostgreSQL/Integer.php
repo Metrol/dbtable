@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use RangeException;
 
 class Integer implements Field
 {
@@ -85,7 +86,7 @@ class Integer implements Field
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue == null )
         {
-            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+            throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
@@ -105,14 +106,14 @@ class Integer implements Field
         {
             if ( $inputValue != intval($inputValue) )
             {
-                throw new \RangeException('Setting PHP value of ' .
+                throw new RangeException('Setting PHP value of ' .
                                           $this->fieldName .
                                           ' is not an integer');
             }
 
             if ( $inputValue < $this->getMin() or $inputValue > $this->getMax() )
             {
-                throw new \RangeException('Setting PHP value of ' .
+                throw new RangeException('Setting PHP value of ' .
                                           $this->fieldName .
                                           ' is outside of what is allowed');
             }
@@ -140,15 +141,28 @@ class Integer implements Field
     }
 
     /**
-     * @inheritdoc
+     * The value passed in will be converted to a format ready to be bound
+     * to a SQL engine execute.  Objects and arrays will be converted to their
+     * string representations.
+     *
+     * No quotes or escaping of characters will be performed.
+     *
+     * @param mixed $inputValue
+     *
+     * @return Field\Value
+     *
+     * @throws RangeException
      */
     public function getSqlBoundValue($inputValue)
     {
+        $fieldVal = new Field\Value;
+        $key      = uniqid(':');
+
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
-            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+            throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
@@ -156,11 +170,17 @@ class Integer implements Field
         // convert to a 0 when it isn't
         if ( $inputValue === null and $this->isNullOk() )
         {
-            return null;
+            $fieldVal->setSqlString($key)
+                ->addBinding($key, null);
+
+            return $fieldVal;
         }
         else if ( $inputValue === null and !$this->isNullOk() )
         {
-            return 0;
+            $fieldVal->setSqlString($key)
+                     ->addBinding($key, 0);
+
+            return $fieldVal;
         }
 
         // Throw an exception when in strict mode and the value is too large
@@ -168,14 +188,14 @@ class Integer implements Field
         {
             if ( $inputValue != intval($inputValue) )
             {
-                throw new \RangeException('Setting SQL value of ' .
+                throw new RangeException('Setting SQL value of ' .
                                           $this->fieldName .
                                           ' is not an integer');
             }
 
             if ( $inputValue < $this->getMin() or $inputValue > $this->getMax() )
             {
-                throw new \RangeException('Setting SQL value of ' .
+                throw new RangeException('Setting SQL value of ' .
                                           $this->fieldName .
                                           ' is outside of what is allowed');
             }
@@ -183,23 +203,26 @@ class Integer implements Field
 
         // No strict mode issues, no null issues... go ahead and make sure this
         // value is an integer
-        $rtn = intval($inputValue);
+        $value = intval($inputValue);
 
         // If things are out of range at this point, reset the value to 0 or
         // null depending on which is allowed
-        if ( $rtn < $this->getMin() or $rtn > $this->getMax() )
+        if ( $value < $this->getMin() or $value > $this->getMax() )
         {
             if ( $this->isNullOk() )
             {
-                $rtn = null;
+                $value = null;
             }
             else
             {
-                $rtn = 0;
+                $value = 0;
             }
         }
 
-        return $rtn;
+        $fieldVal->setSqlString($key)
+            ->addBinding($key, $value);
+
+        return $fieldVal;
     }
 
     /**
