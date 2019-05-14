@@ -40,10 +40,22 @@ class Time implements Field
     }
 
     /**
-     * @inheritdoc
+     * The value passed in will be converted to a format ready to be bound
+     * to a SQL engine execute.  Objects and arrays will be converted a Field
+     * Value object.
+     *
+     * @param mixed $inputValue
+     *
+     * @return Field\Value
      */
     public function getSqlBoundValue($inputValue)
     {
-        return $inputValue;
+        $fieldVal = new Field\Value;
+        $key      = uniqid(':');
+
+        $fieldVal->setSqlString($key)
+            ->addBinding($key, $fieldVal);
+
+        return $fieldVal;
     }
 }
