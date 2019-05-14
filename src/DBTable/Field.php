@@ -121,7 +121,7 @@ interface Field
      *
      * @param mixed $inputValue
      *
-     * @return Field/Value
+     * @return Field\Value
      *
      * @throws RangeException
      */
