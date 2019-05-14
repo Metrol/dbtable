@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use RangeException;
 
 class Character implements Field
 {
@@ -50,7 +51,7 @@ class Character implements Field
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue == null )
         {
-            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+            throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
@@ -74,7 +75,7 @@ class Character implements Field
         // Throw an exception when in strict mode and the value is too large
         if ( $this->strict and strlen($inputValue) > $this->maxVal )
         {
-            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+            throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' has too many characters');
         }
 
@@ -86,15 +87,29 @@ class Character implements Field
     }
 
     /**
-     * @inheritdoc
+     * The value passed in will be converted to a format ready to be bound
+     * to a SQL engine execute.  Objects and arrays will be converted to their
+     * string representations.
+     *
+     * No quotes or escaping of characters will be performed.
+     *
+     * @param mixed $inputValue
+     *
+     * @return Field\Value
+     *
+     * @throws RangeException
      */
     public function getSqlBoundValue($inputValue)
     {
+        $fieldVal = new Field\Value;
+        $key = uniqid(':');
+        $val = '';
+
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
-            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+            throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
@@ -102,31 +117,40 @@ class Character implements Field
         // convert to an empty string when it isn't.
         if ( $inputValue == null and $this->isNullOk() )
         {
-            return null;
+            return $fieldVal;
         }
         else if ( $inputValue == null and !$this->isNullOk() )
         {
-            return '';
+            $fieldVal->setSqlString($key)
+                ->addBinding($key, $val);
+
+            return $fieldVal;
         }
 
         // Without a max value, no need to check for the string length
         if ( $this->maxVal == null or $this->maxVal == 0 )
         {
-            return $inputValue;
+            $fieldVal->setSqlString($key)
+                ->addBinding($key, $inputValue);
+
+            return $fieldVal;
         }
 
         // Throw an exception when in strict mode and the value is too large
         if ( $this->strict and strlen($inputValue) > $this->maxVal )
         {
-            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+            throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' has too many characters');
         }
 
         // If not null, not strict and all that, just make sure to truncate to
         // the maximum allowed characters
-        $rtn = substr($inputValue, 0, $this->maxVal);
+        $val = substr($inputValue, 0, $this->maxVal);
 
-        return $rtn;
+        $fieldVal->setSqlString($key)
+            ->addBinding($key, $val);
+
+        return $fieldVal;
     }
 
     /**

@@ -78,13 +78,13 @@ class Point implements Field
      *
      * @param array $inputValue
      *
-     * @return Field\Value|null
+     * @return Field\Value
      *
      * @throws RangeException
      */
     public function getSqlBoundValue($inputValue)
     {
-        $rtn = null;
+        $rtn = new Field\Value;
 
         if ( is_array($inputValue) )
         {
@@ -101,9 +101,7 @@ class Point implements Field
             $xKey = uniqid(':');
             $yKey = uniqid(':');
 
-            $rtn = new Field\Value;
-
-            $rtn->setSqlString( 'point('. $xKey .','. $yKey .')' )
+            $rtn->setSqlString( 'point('. $xKey .', '. $yKey .')' )
                 ->addBinding($xKey, $x)
                 ->addBinding($yKey, $y);
         }

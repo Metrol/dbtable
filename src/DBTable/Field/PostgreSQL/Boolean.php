@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use RangeException;
 
 class Boolean implements Field
 {
@@ -92,20 +93,44 @@ class Boolean implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
+        $field = new Field\Value;
+
+        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        {
+            throw new RangeException('Setting SQL value of '.$this->fieldName.
+                                     ' to null is not allowed');
+        }
+
+        if ( !$this->strict and !$this->isNullOk() and $inputValue === null )
+        {
+            return $field;
+        }
+
         $phpVal = $this->getPHPValue($inputValue);
 
-        if ( $phpVal === null )
+        $key = uniqid(':');
+
+        switch ( $phpVal )
         {
-            return null;
+            case null:
+                $value = 'null';
+                break;
+
+            case true:
+                $value = 'true';
+                break;
+
+            case false:
+                $value = 'false';
+                break;
+
+            default:
+                $value = 'null';
         }
 
-        if ( $phpVal === true )
-        {
-            return 'true';
-        }
-        else
-        {
-            return 'false';
-        }
+        $field->setSqlString($key)
+              ->addBinding($key, $value);
+
+        return $field;
     }
 }
