@@ -20,7 +20,7 @@ class Value
      *
      * @var string
      */
-    public $sqlStr = '';
+    public $sqlStr = null;
 
     /**
      * The bindings to attach to the SQL for storing this value
