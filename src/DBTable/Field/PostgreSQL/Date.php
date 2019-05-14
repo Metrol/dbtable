@@ -107,15 +107,28 @@ class Date implements Field
     }
 
     /**
-     * @inheritdoc
+     * The value passed in will be converted to a format ready to be bound
+     * to a SQL engine execute.  Objects and arrays will be converted to their
+     * string representations.
+     *
+     * No quotes or escaping of characters will be performed.
+     *
+     * @param mixed $inputValue
+     *
+     * @return Field\Value
+     *
+     * @throws Exception
      */
     public function getSqlBoundValue($inputValue)
     {
+        $fieldVal = new Field\Value;
+        $key      = uniqid(':');
+
         $dateObj = $this->getPHPValue($inputValue);
 
         if ( $dateObj === null )
         {
-            return null;
+            return $fieldVal;
         }
 
         $fmt = self::FMT_DATE;
@@ -139,6 +152,9 @@ class Date implements Field
                 break;
         }
 
-        return $dateObj->format($fmt);
+        $fieldVal->setSqlString($key)
+            ->addBinding($key, $dateObj->format($fmt));
+
+        return $fieldVal;
     }
 }

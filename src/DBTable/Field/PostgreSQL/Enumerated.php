@@ -65,11 +65,25 @@ class Enumerated implements Field
     }
 
     /**
-     * @inheritdoc
+     * The value passed in will be converted to a format ready to be bound
+     * to a SQL engine execute.  Objects and arrays will be converted to their
+     * string representations.
+     *
+     * No quotes or escaping of characters will be performed.
+     *
+     * @param mixed $inputValue
+     *
+     * @return Field\Value
      */
     public function getSqlBoundValue($inputValue)
     {
-        return $inputValue;
+        $fieldVal = new Field\Value;
+        $key = uniqid(':');
+
+        $fieldVal->setSqlString($key)
+            ->addBinding($key, $inputValue);
+
+        return $fieldVal;
     }
 
     /**
