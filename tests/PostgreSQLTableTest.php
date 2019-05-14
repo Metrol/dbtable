@@ -300,13 +300,28 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
 
-        $sqlVal = $field->getSqlBoundValue([3, 4.53]);
         $phpVal = $field->getPHPValue('(3.14, 4.53)');
 
-        $this->assertEquals('(3, 4.53)', $sqlVal);
         $this->assertCount(2, $phpVal);
         $this->assertEquals(3.14, $phpVal[0]);
         $this->assertEquals(4.53, $phpVal[1]);
+
+        $fieldVal = $field->getSqlBoundValue([3, 4.53]);
+
+        $this->assertCount(2, $fieldVal->getBoundValues());
+        $this->assertEquals(2, $fieldVal->getBindCount());
+
+        $bindArr = $fieldVal->getBoundValues();
+        $keys = array_keys($bindArr);
+        $vals = array_values($bindArr);
+
+        $testSql = 'point(' . implode(', ', $keys) . ')';
+        $this->assertEquals($testSql, $fieldVal->getSqlString());
+
+        $this->assertEquals(3, $vals[0]);
+        $this->assertEquals(4.53, $vals[1]);
+
+        echo $testSql, PHP_EOL;
     }
 
     /**
@@ -322,8 +337,15 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(56, strlen($testStr));
         $cleanStr = $field->getPHPValue($testStr);
         $this->assertEquals(50, strlen($cleanStr));
-        $cleanStr = $field->getSqlBoundValue($testStr);
-        $this->assertEquals(50, strlen($cleanStr));
+
+
+        $testStr = str_repeat('z', 50);
+
+        $fieldVal = $field->getSqlBoundValue($testStr);
+        $key = $fieldVal->getSqlString();
+
+        $this->assertEquals($key, $fieldVal->getSqlString());
+        $this->assertEquals($testStr, $fieldVal->getBoundValues()[$key]);
     }
 
     /**
@@ -340,8 +362,12 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('DateTime', $fldObj);
         $this->assertEquals('2016-07-04', $fldObj->format('Y-m-d'));
-        $this->assertEquals('2016-07-04', $field->getSqlBoundValue($fldObj));
-        $this->assertEquals('2016-07-04', $field->getSqlBoundValue($testDate));
+
+        $fieldVal = $field->getSqlBoundValue($testDate);
+        $key = $fieldVal->getSqlString();
+
+        $this->assertEquals(1, $fieldVal->getBindCount());
+        $this->assertEquals('2016-07-04', $fieldVal->getBoundValues()[$key]);
     }
 
     /**
