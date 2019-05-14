@@ -20,14 +20,14 @@ class Value
      *
      * @var string
      */
-    public $sqlStr = null;
+    private $sqlStr = null;
 
     /**
      * The bindings to attach to the SQL for storing this value
      *
      * @var array
      */
-    public $binding = [];
+    private $binding = [];
 
     /**
      * Instantiate the field value
@@ -50,6 +50,16 @@ class Value
         $this->sqlStr = $sql;
 
         return $this;
+    }
+
+    /**
+     * Provide the string to put into the SQL statement
+     *
+     * @return string|null
+     */
+    public function getSqlString()
+    {
+        return $this->sqlStr;
     }
 
     /**
@@ -79,5 +89,25 @@ class Value
         $this->binding[$key] = $value;
 
         return $this;
+    }
+
+    /**
+     * Provide the bound values array
+     *
+     * @return array
+     */
+    public function getBoundValues()
+    {
+        return $this->binding;
+    }
+
+    /**
+     * Provide the number of items bound to this field value
+     *
+     * @return integer
+     */
+    public function getBindCount()
+    {
+        return count($this->binding);
     }
 }
