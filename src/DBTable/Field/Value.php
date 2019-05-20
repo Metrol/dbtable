@@ -16,11 +16,18 @@ namespace Metrol\DBTable\Field;
 class Value
 {
     /**
+     * The name of the field
+     *
+     * @var string
+     */
+    private $fieldName = null;
+
+    /**
      * The place holder that is used in the SQL string
      *
      * @var string
      */
-    private $sqlStr = null;
+    private $valueMarker = null;
 
     /**
      * The bindings to attach to the SQL for storing this value
@@ -32,10 +39,21 @@ class Value
     /**
      * Instantiate the field value
      *
+     * @param string $fieldName
      */
-    public function __construct()
+    public function __construct(string $fieldName)
     {
+        $this->fieldName = $fieldName;
+    }
 
+    /**
+     * Provide the name of the field
+     *
+     * @return string
+     */
+    public function getFieldName(): string
+    {
+        return $this->fieldName;
     }
 
     /**
@@ -45,9 +63,9 @@ class Value
      *
      * @return $this
      */
-    public function setSqlString($sql)
+    public function setValueMarker(string $sql): self
     {
-        $this->sqlStr = $sql;
+        $this->valueMarker = $sql;
 
         return $this;
     }
@@ -57,9 +75,9 @@ class Value
      *
      * @return string|null
      */
-    public function getSqlString()
+    public function getValueMarker()
     {
-        return $this->sqlStr;
+        return $this->valueMarker;
     }
 
     /**
@@ -69,7 +87,7 @@ class Value
      *
      * @return $this
      */
-    public function setBinding($binding)
+    public function setBinding(array $binding): self
     {
         $this->binding = $binding;
 
@@ -84,7 +102,7 @@ class Value
      *
      * @return $this
      */
-    public function addBinding($key, $value)
+    public function addBinding(string $key, $value): self
     {
         $this->binding[$key] = $value;
 
@@ -96,7 +114,7 @@ class Value
      *
      * @return array
      */
-    public function getBoundValues()
+    public function getBoundValues(): array
     {
         return $this->binding;
     }
@@ -106,7 +124,7 @@ class Value
      *
      * @return integer
      */
-    public function getBindCount()
+    public function getBindCount(): int
     {
         return count($this->binding);
     }
