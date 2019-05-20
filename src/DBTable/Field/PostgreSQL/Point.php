@@ -23,13 +23,6 @@ class Point implements Field
     const PHP_TYPE = 'array';
 
     /**
-     * The kind of Field that is allowed in this array
-     *
-     * @var Field
-     */
-    private $field;
-
-    /**
      * Instantiate the object and setup the basics
      *
      * @param string $fieldName
@@ -37,7 +30,6 @@ class Point implements Field
     public function __construct($fieldName)
     {
         $this->fieldName = $fieldName;
-        $this->field     = null;
     }
 
     /**
@@ -111,19 +103,5 @@ class Point implements Field
         }
 
         return $rtn;
-    }
-
-    /**
-     * Sets the type that is allowed into the array
-     *
-     * @param Field $field
-     *
-     * @return $this
-     */
-    public function setArrayFieldType(Field $field)
-    {
-        $this->field = $field;
-
-        return $this;
     }
 }
