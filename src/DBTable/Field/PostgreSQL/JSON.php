@@ -62,7 +62,7 @@ class JSON implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        $fieldVal = new Field\Value;
+        $fieldVal = new Field\Value($this->fieldName);
         $key      = uniqid(':');
 
         $validJSON = $this->validateJSON($inputValue);
@@ -76,7 +76,7 @@ class JSON implements Field
         // Not valid, not strict, and nulls are okay.  Null is the value!
         if ( $validJSON !== self::JSON_OK and $this->isNullOk() )
         {
-            $fieldVal->setSqlString($key)
+            $fieldVal->setValueMarker($key)
                 ->addBinding($key, null);
 
             return $fieldVal;
@@ -85,14 +85,14 @@ class JSON implements Field
         // Not valid, not strict, and nulls not okay.  Empty string for a value
         if ( $validJSON !== self::JSON_OK and !$this->isNullOk() )
         {
-            $fieldVal->setSqlString($key)
+            $fieldVal->setValueMarker($key)
                 ->addBinding($key, '');
 
             return $fieldVal;
         }
 
         // Everything appears okay, so process the field value
-        $fieldVal->setSqlString($key)
+        $fieldVal->setValueMarker($key)
             ->addBinding($key, $inputValue);
 
         return $fieldVal;

@@ -84,7 +84,7 @@ class Point implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        $rtn = new Field\Value;
+        $rtn = new Field\Value($this->fieldName);
 
         if ( is_array($inputValue) )
         {
@@ -101,7 +101,7 @@ class Point implements Field
             $xKey = uniqid(':');
             $yKey = uniqid(':');
 
-            $rtn->setSqlString( 'point('. $xKey .', '. $yKey .')' )
+            $rtn->setValueMarker( 'point('. $xKey .', '. $yKey .')' )
                 ->addBinding($xKey, $x)
                 ->addBinding($yKey, $y);
         }

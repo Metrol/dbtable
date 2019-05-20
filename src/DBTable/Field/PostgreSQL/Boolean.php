@@ -93,7 +93,7 @@ class Boolean implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        $field = new Field\Value;
+        $field = new Field\Value($this->fieldName);
 
         if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
@@ -128,7 +128,7 @@ class Boolean implements Field
                 $value = 'null';
         }
 
-        $field->setSqlString($key)
+        $field->setValueMarker($key)
               ->addBinding($key, $value);
 
         return $field;

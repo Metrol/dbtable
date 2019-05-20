@@ -155,7 +155,7 @@ class Integer implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        $fieldVal = new Field\Value;
+        $fieldVal = new Field\Value($this->fieldName);
         $key      = uniqid(':');
 
         // In strict mode, if null is not okay and the value is null then we
@@ -170,14 +170,14 @@ class Integer implements Field
         // convert to a 0 when it isn't
         if ( $inputValue === null and $this->isNullOk() )
         {
-            $fieldVal->setSqlString($key)
+            $fieldVal->setValueMarker($key)
                 ->addBinding($key, null);
 
             return $fieldVal;
         }
         else if ( $inputValue === null and !$this->isNullOk() )
         {
-            $fieldVal->setSqlString($key)
+            $fieldVal->setValueMarker($key)
                      ->addBinding($key, 0);
 
             return $fieldVal;
@@ -219,7 +219,7 @@ class Integer implements Field
             }
         }
 
-        $fieldVal->setSqlString($key)
+        $fieldVal->setValueMarker($key)
             ->addBinding($key, $value);
 
         return $fieldVal;

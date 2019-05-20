@@ -121,7 +121,7 @@ class Date implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        $fieldVal = new Field\Value;
+        $fieldVal = new Field\Value($this->fieldName);
         $key      = uniqid(':');
 
         $dateObj = $this->getPHPValue($inputValue);
@@ -152,7 +152,7 @@ class Date implements Field
                 break;
         }
 
-        $fieldVal->setSqlString($key)
+        $fieldVal->setValueMarker($key)
             ->addBinding($key, $dateObj->format($fmt));
 
         return $fieldVal;

@@ -101,7 +101,7 @@ class Character implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
-        $fieldVal = new Field\Value;
+        $fieldVal = new Field\Value($this->fieldName);
         $key = uniqid(':');
         $val = '';
 
@@ -121,7 +121,7 @@ class Character implements Field
         }
         else if ( $inputValue == null and !$this->isNullOk() )
         {
-            $fieldVal->setSqlString($key)
+            $fieldVal->setValueMarker($key)
                 ->addBinding($key, $val);
 
             return $fieldVal;
@@ -130,7 +130,7 @@ class Character implements Field
         // Without a max value, no need to check for the string length
         if ( $this->maxVal == null or $this->maxVal == 0 )
         {
-            $fieldVal->setSqlString($key)
+            $fieldVal->setValueMarker($key)
                 ->addBinding($key, $inputValue);
 
             return $fieldVal;
@@ -147,7 +147,7 @@ class Character implements Field
         // the maximum allowed characters
         $val = substr($inputValue, 0, $this->maxVal);
 
-        $fieldVal->setSqlString($key)
+        $fieldVal->setValueMarker($key)
             ->addBinding($key, $val);
 
         return $fieldVal;

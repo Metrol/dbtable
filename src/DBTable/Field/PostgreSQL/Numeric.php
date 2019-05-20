@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use RangeException;
 
 /**
  * Provides a field definition for any number type that includes decimals
@@ -61,7 +62,7 @@ class Numeric implements Field
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
-            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+            throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
@@ -81,7 +82,7 @@ class Numeric implements Field
         {
             if ( $inputValue < $this->getMin() or $inputValue > $this->getMax() )
             {
-                throw new \RangeException('Setting PHP value of ' .
+                throw new RangeException('Setting PHP value of ' .
                                           $this->fieldName .
                                           ' is outside of what is allowed');
             }
@@ -117,19 +118,28 @@ class Numeric implements Field
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
-            throw new \RangeException('Setting SQL value of '.$this->fieldName.
+            throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
+
+        $fieldValue = new Field\Value($this->fieldName);
+        $key        = uniqid(':');
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to a 0 when it isn't
         if ( $inputValue === null and $this->isNullOk() )
         {
-            return null;
+            $fieldValue->setValueMarker($key)
+                ->addBinding($key, null);
+
+            return $fieldValue;
         }
         else if ( $inputValue === null and !$this->isNullOk() )
         {
-            return 0;
+            $fieldValue->setValueMarker($key)
+                ->addBinding($key, 0);
+
+            return $fieldValue;
         }
 
         // Throw an exception when in strict mode and the value is too large
@@ -137,7 +147,7 @@ class Numeric implements Field
         {
             if ( $inputValue < $this->getMin() or $inputValue > $this->getMax() )
             {
-                throw new \RangeException('Setting SQL value of ' .
+                throw new RangeException('Setting SQL value of ' .
                                           $this->fieldName .
                                           ' is outside of what is allowed');
             }
@@ -145,23 +155,26 @@ class Numeric implements Field
 
         // No strict mode issues, no null issues... go ahead and make sure this
         // value is rounded to what is allowed
-        $rtn = round($inputValue, $this->scale);
+        $value = round($inputValue, $this->scale);
 
         // If things are out of range at this point, reset the value to 0 or
         // null depending on which is allowed
-        if ( $rtn < $this->getMin() or $rtn > $this->getMax() )
+        if ( $value < $this->getMin() or $value > $this->getMax() )
         {
             if ( $this->isNullOk() )
             {
-                $rtn = null;
+                $value = null;
             }
             else
             {
-                $rtn = 0;
+                $value = 0;
             }
         }
 
-        return $rtn;
+        $fieldValue->setValueMarker($key)
+            ->addBinding($key, $value);
+
+        return $value;
     }
 
 
