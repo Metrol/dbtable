@@ -81,20 +81,6 @@ class Value
     }
 
     /**
-     * Set the binding array for the field with values
-     *
-     * @param array $binding
-     *
-     * @return $this
-     */
-    public function setBinding(array $binding): self
-    {
-        $this->binding = $binding;
-
-        return $this;
-    }
-
-    /**
      * Set a single binding value
      *
      * @param string $key
