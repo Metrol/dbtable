@@ -251,21 +251,6 @@ class PropertyLookup
     }
 
     /**
-     * Generate a new Array field
-     *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
-     */
-    private function newArrayField(stdClass $fieldDef)
-    {
-        $field = new Fld\Arrays($fieldDef->column_name);
-        $this->setProperties($field, $fieldDef);
-
-        return $field;
-    }
-
-    /**
      * Generate a new Boolean field
      *
      * @param stdClass $fieldDef
