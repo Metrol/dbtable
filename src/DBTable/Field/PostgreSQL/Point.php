@@ -35,7 +35,7 @@ class Point implements Field
     /**
      * Converts the database value to an array when used in a PHP context
      *
-     * @param string $inputValue
+     * @param string|array $inputValue
      *
      * @return array|null
      */
@@ -47,6 +47,24 @@ class Point implements Field
         }
 
         $rtn = [];
+
+        if ( is_array($inputValue) )
+        {
+            for ( $i = 0; $i <= 1; $i++)
+            {
+                if ( array_key_exists($i, $inputValue) )
+                {
+                    $rtn[$i] = floatval($inputValue[$i]);
+                }
+                else
+                {
+                    $rtn[$i] = 0;
+                }
+            }
+
+            return $rtn;
+        }
+
         $inpStr = $inputValue;
 
         // Strip the parantheses from the string
