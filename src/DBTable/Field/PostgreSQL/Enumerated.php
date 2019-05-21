@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use PDO;
 
 class Enumerated implements Field
 {
@@ -173,11 +174,11 @@ class Enumerated implements Field
      * Looks up the allowed values for the specified enum type and assigns that
      * list to this object.  May only be run once.
      *
-     * @param \PDO $db
+     * @param PDO $db
      *
      * @return $this
      */
-    public function runEnumValues(\PDO $db)
+    public function runEnumValues(PDO $db)
     {
         if ( !empty($this->eVals) )
         {
@@ -206,14 +207,14 @@ FROM
         ON n.oid = t.typnamespace
         AND n.nspname = :schema
 ORDER BY
-    e.enumsortorder ASC
+    e.enumsortorder
 
 SQL;
 
         $sth = $db->prepare($sql);
         $sth->execute($binding);
 
-        while ( $row = $sth->fetch(\PDO::FETCH_NUM) )
+        while ( $row = $sth->fetch(PDO::FETCH_NUM) )
         {
             $this->eVals[] = $row[0];
         }
