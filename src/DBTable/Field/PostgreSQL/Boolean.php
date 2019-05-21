@@ -94,26 +94,28 @@ class Boolean implements Field
     public function getSqlBoundValue($inputValue)
     {
         $field = new Field\Value($this->fieldName);
+        $key   = Field\Value::getBindKey();
 
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $inputValue === null and $this->strict and !$this->isNullOk() )
         {
             throw new RangeException('Setting SQL value of '.$this->fieldName.
                                      ' to null is not allowed');
         }
 
-        if ( !$this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $inputValue === null and !$this->strict and !$this->isNullOk() )
         {
+            $field->setValueMarker($key)
+                ->addBinding($key, 'false');
+
             return $field;
         }
 
         $phpVal = $this->getPHPValue($inputValue);
 
-        $key = uniqid(':');
-
         switch ( $phpVal )
         {
             case null:
-                $value = 'null';
+                $value = null;
                 break;
 
             case true:
@@ -125,7 +127,7 @@ class Boolean implements Field
                 break;
 
             default:
-                $value = 'null';
+                $value = null;
         }
 
         $field->setValueMarker($key)
