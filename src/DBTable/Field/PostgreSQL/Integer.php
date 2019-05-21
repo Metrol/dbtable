@@ -156,7 +156,7 @@ class Integer implements Field
     public function getSqlBoundValue($inputValue)
     {
         $fieldVal = new Field\Value($this->fieldName);
-        $key      = uniqid(':');
+        $key      = Field\Value::getBindKey();
 
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.

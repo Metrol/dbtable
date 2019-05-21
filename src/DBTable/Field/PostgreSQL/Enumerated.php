@@ -78,7 +78,7 @@ class Enumerated implements Field
     public function getSqlBoundValue($inputValue)
     {
         $fieldVal = new Field\Value($this->fieldName);
-        $key = uniqid(':');
+        $key = Field\Value::getBindKey();
 
         $fieldVal->setValueMarker($key)
             ->addBinding($key, $inputValue);

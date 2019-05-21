@@ -102,7 +102,7 @@ class Character implements Field
     public function getSqlBoundValue($inputValue)
     {
         $fieldVal = new Field\Value($this->fieldName);
-        $key = uniqid(':');
+        $key = Field\Value::getBindKey();
         $val = '';
 
         // In strict mode, if null is not okay and the value is null then we
