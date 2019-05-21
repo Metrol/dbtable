@@ -123,7 +123,7 @@ class Numeric implements Field
         }
 
         $fieldValue = new Field\Value($this->fieldName);
-        $key        = uniqid(':');
+        $key        = Field\Value::getBindKey();
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to a 0 when it isn't
@@ -174,7 +174,7 @@ class Numeric implements Field
         $fieldValue->setValueMarker($key)
             ->addBinding($key, $value);
 
-        return $value;
+        return $fieldValue;
     }
 
 
