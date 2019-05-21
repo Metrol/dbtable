@@ -68,7 +68,7 @@ class Point implements Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param array $inputValue
+     * @param array|null $inputValue
      *
      * @return Field\Value
      *
@@ -77,6 +77,36 @@ class Point implements Field
     public function getSqlBoundValue($inputValue)
     {
         $rtn = new Field\Value($this->fieldName);
+
+        // Handle an okay null value
+        if ( $inputValue === null and $this->isNullOk() )
+        {
+            $key = Field\Value::getBindKey();
+
+            $rtn->setValueMarker($key)
+                ->addBinding($key, null);
+
+            return $rtn;
+        }
+
+        // Silently deal with a null that's not allowed when not in strict mode
+        if ( $inputValue === null and !$this->isNullOk() and !$this->strict )
+        {
+            $xKey = Field\Value::getBindKey();
+            $yKey = Field\Value::getBindKey();
+
+            $rtn->setValueMarker( 'point('. $xKey .', '. $yKey .')' )
+                ->addBinding($xKey, 0)
+                ->addBinding($yKey, 0);
+
+            return $rtn;
+        }
+
+        // Null value that's not okay, and in strict mode.  Throw exception!
+        if ( $inputValue === null and !$this->isNullOk() and $this->strict )
+        {
+            throw new RangeException('Null not allowed for field: '. $this->fieldName);
+        }
 
         if ( is_array($inputValue) )
         {
@@ -90,8 +120,8 @@ class Point implements Field
             $x = floatval($x);
             $y = floatval($y);
 
-            $xKey = uniqid(':');
-            $yKey = uniqid(':');
+            $xKey = Field\Value::getBindKey();
+            $yKey = Field\Value::getBindKey();
 
             $rtn->setValueMarker( 'point('. $xKey .', '. $yKey .')' )
                 ->addBinding($xKey, $x)
