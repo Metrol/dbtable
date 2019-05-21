@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use RangeException;
 
 class XML implements Field
 {
@@ -44,6 +45,17 @@ class XML implements Field
      */
     public function getSqlBoundValue($inputValue)
     {
+        $fieldVal = new Field\Value($this->fieldName);
+        $key      = Field\Value::getBindKey();
+
+        if ( $inputValue === null and !$this->isNullOk() )
+        {
+            throw new RangeException('Null not allowed for field: '. $this->fieldName);
+        }
+
+        $fieldVal->setValueMarker($key)
+            ->addBinding($key, $inputValue);
+
         return $inputValue;
     }
 }
