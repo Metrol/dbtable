@@ -54,7 +54,7 @@ class PostgreSQL implements DBTable
         $this->name             = $name;
         $this->schema           = empty($schema) ? 'public' : $schema;
         $this->fields           = new Field\Set;
-        $this->primaryKeyFields = array();
+        $this->primaryKeyFields = [];
     }
 
     /**
