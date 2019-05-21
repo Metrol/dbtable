@@ -114,4 +114,14 @@ class Value
     {
         return count($this->binding);
     }
+
+    /**
+     * Provide a unique binding key
+     *
+     * @return string
+     */
+    static public function getBindKey(): string
+    {
+        return uniqid(':_') . '_';
+    }
 }
