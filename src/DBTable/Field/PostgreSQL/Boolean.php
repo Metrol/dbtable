@@ -124,20 +124,6 @@ class Boolean implements Field
         $field = new Field\Value($this->fieldName);
         $key   = Field\Value::getBindKey();
 
-        if ( $inputValue === null and $this->strict and !$this->isNullOk() )
-        {
-            throw new RangeException('Setting SQL value of '.$this->fieldName.
-                                     ' to null is not allowed');
-        }
-
-        if ( $inputValue === null and !$this->strict and !$this->isNullOk() )
-        {
-            $field->setValueMarker($key)
-                ->addBinding($key, 'false');
-
-            return $field;
-        }
-
         $phpVal = $this->getPHPValue($inputValue);
 
         switch ( $phpVal )
