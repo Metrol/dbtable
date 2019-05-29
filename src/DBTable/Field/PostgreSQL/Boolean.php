@@ -33,12 +33,33 @@ class Boolean implements Field
     }
 
     /**
+     * Insure the default value, when set, stores the actual boolean value
+     * against this field.
+     *
+     * @param string|bool $defaultValue
+     *
+     * @return $this
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        if ( $defaultValue === true or $defaultValue === 'true' or $defaultValue === 't' )
+        {
+            $this->defaultValue = true;
+        }
+
+        if ( $defaultValue === false or $defaultValue === 'false' or $defaultValue === 'f' )
+        {
+            $this->defaultValue = false;
+        }
+
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getPHPValue($inputValue)
     {
-        $rtn = false; // Default value if nothing else can manage to set
-
         // When the value is already boolean, keep it that way
         if ( $inputValue === true or $inputValue === false )
         {
@@ -73,7 +94,14 @@ class Boolean implements Field
         }
         else if ( $inputValue === null and !$this->isNullOk() )
         {
-            return $rtn;
+            if ( $this->getDefaultValue() !== null )
+            {
+                return $this->getDefaultValue();
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // If we actually made it this far, default to PHP handling of boolean
