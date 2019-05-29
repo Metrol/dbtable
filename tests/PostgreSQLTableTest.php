@@ -191,8 +191,7 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
                                 $field);
         $this->assertEquals('truedef', $field->getName());
 
-        // Not passing yet
-        // $this->assertTrue($field->getPHPValue(null));
+        $this->assertTrue($field->getPHPValue(null));
     }
 
     /**
