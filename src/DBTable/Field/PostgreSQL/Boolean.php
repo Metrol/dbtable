@@ -61,17 +61,17 @@ class Boolean implements Field
         // need to throw an error.
         if ( $this->strict and !$this->isNullOk() and $inputValue == null )
         {
-            throw new \RangeException('Setting PHP value of '.$this->fieldName.
+            throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to a false if it isn't
-        if ( $inputValue == null and $this->isNullOk() )
+        if ( $inputValue === null and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue == null and !$this->isNullOk() )
+        else if ( $inputValue === null and !$this->isNullOk() )
         {
             return $rtn;
         }
