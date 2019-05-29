@@ -150,7 +150,7 @@ class Boolean implements Field
         }
         elseif ( $phpVal === false )
         {
-            $value = false;
+            $value = 'false';
         }
 
         $field->setValueMarker($key)
