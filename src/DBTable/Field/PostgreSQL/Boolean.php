@@ -126,22 +126,31 @@ class Boolean implements Field
 
         $phpVal = $this->getPHPValue($inputValue);
 
-        switch ( $phpVal )
+        // Set the default value
+        if ( $this->isNullOk() )
         {
-            case null:
-                $value = null;
-                break;
+            $value = null;
+        }
+        else if ( $this->defaultValue !== null )
+        {
+            $value = $this->defaultValue;
+        }
+        else
+        {
+            $value = false;
+        }
 
-            case true:
-                $value = 'true';
-                break;
-
-            case false:
-                $value = 'false';
-                break;
-
-            default:
-                $value = null;
+        if ( $phpVal === null )
+        {
+            $value = null;
+        }
+        elseif ( $phpVal === true )
+        {
+            $value = 'true';
+        }
+        elseif ( $phpVal === false )
+        {
+            $value = false;
         }
 
         $field->setValueMarker($key)
