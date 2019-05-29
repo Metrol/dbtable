@@ -192,6 +192,10 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('truedef', $field->getName());
 
         $this->assertTrue($field->getPHPValue(null));
+        $boundVal = $field->getSqlBoundValue(null);
+        $valMarker = $boundVal->getValueMarker();
+
+        $this->assertEquals('true', $boundVal->getBoundValues()[$valMarker]);
     }
 
     /**
@@ -355,8 +359,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(3, $vals[0]);
         $this->assertEquals(4.53, $vals[1]);
-
-        echo $testSql, PHP_EOL;
     }
 
     /**
