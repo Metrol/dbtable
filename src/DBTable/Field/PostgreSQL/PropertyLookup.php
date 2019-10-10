@@ -47,6 +47,7 @@ class PropertyLookup
     const T_TIME_TZ      = 'time with time zone';
     const T_TIME         = 'time without time zone';
     const T_JSON         = 'json';
+    const T_JSONB        = 'jsonb';
     const T_XML          = 'xml';
     const T_POINT        = 'point';
 
@@ -160,11 +161,8 @@ class PropertyLookup
                     $field = $this->newDateField($fieldDef);
                     break;
 
-                case self::T_TIME:
-                    $field = $this->newTimeField($fieldDef);
-                    break;
-
                 case self::T_TIME_TZ:
+                case self::T_TIME:
                     $field = $this->newTimeField($fieldDef);
                     break;
 
@@ -181,6 +179,7 @@ class PropertyLookup
                     break;
 
                 case self::T_JSON:
+                case self::T_JSONB:
                     $field = $this->newJSONField($fieldDef);
                     break;
 
