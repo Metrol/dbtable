@@ -49,7 +49,7 @@ class Character implements Field
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
             throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -57,17 +57,17 @@ class Character implements Field
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to an empty string when it isn't.
-        if ( $inputValue == null and $this->isNullOk() )
+        if ( $inputValue === null and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue == null and !$this->isNullOk() )
+        else if ( $inputValue === null and !$this->isNullOk() )
         {
             return '';
         }
 
         // Without a max value, no need to check for the string length
-        if ( $this->maxVal == null or $this->maxVal == 0 )
+        if ( $this->maxVal === null or $this->maxVal == 0 )
         {
             return $inputValue;
         }
@@ -115,11 +115,11 @@ class Character implements Field
 
         // When not in strict mode, either keep the null value when its okay or
         // convert to an empty string when it isn't.
-        if ( $inputValue == null and $this->isNullOk() )
+        if ( $inputValue === null and $this->isNullOk() )
         {
             return $fieldVal;
         }
-        else if ( $inputValue == null and !$this->isNullOk() )
+        else if ( $inputValue === null and !$this->isNullOk() )
         {
             $fieldVal->setValueMarker($key)
                 ->addBinding($key, $val);
@@ -128,7 +128,7 @@ class Character implements Field
         }
 
         // Without a max value, no need to check for the string length
-        if ( $this->maxVal == null or $this->maxVal == 0 )
+        if ( $this->maxVal === null or $this->maxVal == 0 )
         {
             $fieldVal->setValueMarker($key)
                 ->addBinding($key, $inputValue);

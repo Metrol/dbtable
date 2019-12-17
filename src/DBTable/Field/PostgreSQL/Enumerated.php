@@ -134,7 +134,7 @@ class Enumerated implements Field
      */
     public function setEnumType($enumType)
     {
-        if ( $this->enumType == null )
+        if ( $this->enumType === null )
         {
             $this->enumType = $enumType;
         }
@@ -162,7 +162,7 @@ class Enumerated implements Field
      */
     public function setSchema($schema)
     {
-        if ( $this->schema == null )
+        if ( $this->schema === null )
         {
             $this->schema = $schema;
         }

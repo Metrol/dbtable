@@ -215,7 +215,7 @@ class Numeric implements Field
         $p = $this->precision;
         $s = $this->scale;
 
-        if ( $p == null or $s == null )
+        if ( $p === null or $s === null )
         {
             return null;
         }
@@ -234,7 +234,7 @@ class Numeric implements Field
         $p = $this->precision;
         $s = $this->scale;
 
-        if ( $p == null or $s == null )
+        if ( $p === null or $s === null )
         {
             return null;
         }

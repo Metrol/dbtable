@@ -84,7 +84,7 @@ class Integer implements Field
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue == null )
+        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
         {
             throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -231,7 +231,7 @@ class Integer implements Field
      */
     public function getMax()
     {
-        if ( $this->maxVal == null )
+        if ( $this->maxVal === null )
         {
             $this->maxVal = pow(self::BYTE_MULT, $this->precision) / 2;
             $this->maxVal--;
@@ -246,7 +246,7 @@ class Integer implements Field
      */
     public function getMin()
     {
-        if ( $this->minVal == null )
+        if ( $this->minVal === null )
         {
             $this->minVal = pow(self::BYTE_MULT, $this->precision) / 2 * -1;
         }
