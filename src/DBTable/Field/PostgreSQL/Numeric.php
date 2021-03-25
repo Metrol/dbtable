@@ -90,7 +90,7 @@ class Numeric implements Field
 
         // No strict mode issues, no null issues... go ahead and make sure this
         // value is rounded to what is allowed
-        $rtn = round($inputValue, $this->scale);
+        $rtn = round(floatval($inputValue), $this->scale);
 
         // If things are out of range at this point, reset the value to 0 or
         // null depending on which is allowed
