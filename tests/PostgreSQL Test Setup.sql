@@ -17,27 +17,21 @@ LC_COLLATE = 'en_US.UTF-8'
 LC_CTYPE = 'en_US.UTF-8'
 CONNECTION LIMIT = -1;
 
-CREATE TYPE "DateRange" AS RANGE
-(SUBTYPE=date,
-SUBTYPE_OPCLASS=date_ops);
-ALTER TYPE "DateRange"
-OWNER TO testuser;
+CREATE TYPE public."DateRange" AS RANGE
+(SUBTYPE=date, SUBTYPE_OPCLASS=date_ops);
+ALTER TYPE "DateRange" OWNER TO testuser;
 
-CREATE TYPE "YesNo" AS ENUM
-    ('Yes',
-        'No');
-ALTER TYPE "YesNo"
-    OWNER TO testuser;
+CREATE TYPE public."YesNo" AS ENUM
+    ('Yes', 'No');
+ALTER TYPE "YesNo" OWNER TO testuser;
 
-CREATE TYPE "DatesAnswer" AS
+CREATE TYPE public."DatesAnswer" AS
 (dt_rng "DateRange",
  ans "YesNo",
  affected integer[]);
-ALTER TYPE "DatesAnswer"
-OWNER TO testuser;
+ALTER TYPE public."DatesAnswer" OWNER TO testuser;
 
-
-CREATE TABLE pgtable1
+CREATE TABLE public.pgtable1
 (
     "primaryKeyID" serial NOT NULL,
     stringone character varying(50),
@@ -65,6 +59,4 @@ CREATE TABLE pgtable1
 WITH (
 OIDS=FALSE
 );
-ALTER TABLE pgtable1
-    OWNER TO testuser;
-
+ALTER TABLE public.pgtable1 OWNER TO testuser;
