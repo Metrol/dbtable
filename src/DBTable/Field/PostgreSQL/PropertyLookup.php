@@ -8,10 +8,11 @@
 
 namespace Metrol\DBTable\Field\PostgreSQL;
 
-use PDO;
 use Metrol\DBTable;
 use Metrol\DBTable\Field\PostgreSQL as Fld;
+use PDO;
 use stdClass;
+use Exception;
 
 /**
  * Used by the PostgreSQL Table class to lookup all the details about the
@@ -54,22 +55,18 @@ class PropertyLookup
     /**
      * The database connection to use for the lookup
      *
-     * @var PDO
      */
-    private $db;
+    private PDO $db;
 
     /**
      * The table the lookup is being performed on
      *
-     * @var DBTable\PostgreSQL
      */
-    private $table;
+    private DBTable\PostgreSQL $table;
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the lookup with a connection and table specified
      *
-     * @param DBTable\PostgreSQL $table
-     * @param PDO                $db
      */
     public function __construct(DBTable\PostgreSQL $table, PDO $db)
     {
@@ -81,9 +78,8 @@ class PropertyLookup
      * Perform the lookup and populate the table with the fields that are
      * assembled.
      *
-     * @return $this
      */
-    public function run()
+    public function run(): static
     {
         $pkFields = $this->findPrimaryKeyFields();
         $this->table->setPrimaryKeyFields($pkFields);
@@ -101,7 +97,7 @@ class PropertyLookup
      *
      * @param stdClass[] $fieldDefList
      */
-    private function populateFieldsIntoTable(array $fieldDefList)
+    private function populateFieldsIntoTable(array $fieldDefList): void
     {
         foreach ( $fieldDefList as $fieldDef )
         {
@@ -109,55 +105,28 @@ class PropertyLookup
 
             switch ( trim($fieldDef->data_type) )
             {
+                case self::T_BIGINT:
+                case self::T_SMALLINT:
                 case self::T_INTEGER:
                     $field = $this->newIntegerField($fieldDef);
                     break;
 
-                case self::T_BIGINT:
-                    $field = $this->newIntegerField($fieldDef);
-                    break;
-
-                case self::T_SMALLINT:
-                    $field = $this->newIntegerField($fieldDef);
-                    break;
-
+                case self::T_MONEY:
+                case self::T_DOUBLE_PREC:
+                case self::T_REAL:
                 case self::T_NUMERIC:
                     $field = $this->newNumericField($fieldDef);
                     break;
 
-                case self::T_MONEY:
-                    $field = $this->newNumericField($fieldDef);
-                    break;
-
-                case self::T_DOUBLE_PREC:
-                    $field = $this->newNumericField($fieldDef);
-                    break;
-
-                case self::T_REAL:
-                    $field = $this->newNumericField($fieldDef);
-                    break;
-
+                case self::T_CHAR:
+                case self::T_TEXT:
                 case self::T_VARCHAR:
                     $field = $this->newCharacterField($fieldDef);
                     break;
 
-                case self::T_CHAR:
-                    $field = $this->newCharacterField($fieldDef);
-                    break;
-
-                case self::T_TEXT:
-                    $field = $this->newCharacterField($fieldDef);
-                    break;
-
-                case self::T_DATE:
-                    $field = $this->newDateField($fieldDef);
-                    break;
-
                 case self::T_TIMESTAMP:
-                    $field = $this->newDateField($fieldDef);
-                    break;
-
                 case self::T_TIMESTAMP_TZ:
+                case self::T_DATE:
                     $field = $this->newDateField($fieldDef);
                     break;
 
@@ -166,9 +135,9 @@ class PropertyLookup
                     $field = $this->newTimeField($fieldDef);
                     break;
 
-                case self::T_ARRAY:
-                    $field = $this->newArrayField($fieldDef);
-                    break;
+                // case self::T_ARRAY:
+                //     $field = $this->newArrayField($fieldDef);
+                //     break;
 
                 case self::T_BOOL:
                     $field = $this->newBooleanField($fieldDef);
@@ -192,7 +161,7 @@ class PropertyLookup
                     break;
             }
 
-            if ( $field != null )
+            if ( ! is_null($field) )
             {
                 $this->table->addField($field);
             }
@@ -202,11 +171,8 @@ class PropertyLookup
     /**
      * Generate a new Integer field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newIntegerField(stdClass $fieldDef)
+    private function newIntegerField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Integer($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -218,11 +184,8 @@ class PropertyLookup
     /**
      * Generate a new Numeric field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newNumericField(stdClass $fieldDef)
+    private function newNumericField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Numeric($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -235,11 +198,8 @@ class PropertyLookup
     /**
      * Generate a new Character field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newCharacterField(stdClass $fieldDef)
+    private function newCharacterField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Character($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -252,11 +212,8 @@ class PropertyLookup
     /**
      * Generate a new Boolean field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newBooleanField(stdClass $fieldDef)
+    private function newBooleanField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Boolean($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -267,11 +224,8 @@ class PropertyLookup
     /**
      * Generate a new JSON field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newJSONField(stdClass $fieldDef)
+    private function newJSONField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\JSON($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -282,11 +236,8 @@ class PropertyLookup
     /**
      * Generate a new XML field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newXMLField(stdClass $fieldDef)
+    private function newXMLField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\XML($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -297,11 +248,8 @@ class PropertyLookup
     /**
      * Generate a new Point field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newPointField(stdClass $fieldDef)
+    private function newPointField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Point($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -312,11 +260,8 @@ class PropertyLookup
     /**
      * Generate a new Date field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newDateField(stdClass $fieldDef)
+    private function newDateField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Date($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -327,11 +272,8 @@ class PropertyLookup
     /**
      * Generate a new Time field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newTimeField(stdClass $fieldDef)
+    private function newTimeField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Time($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -342,11 +284,8 @@ class PropertyLookup
     /**
      * Generate a new Enumerated field
      *
-     * @param stdClass $fieldDef
-     *
-     * @return DBTable\Field
      */
-    private function newEnumeratedField(stdClass $fieldDef)
+    private function newEnumeratedField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Enumerated($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
@@ -358,12 +297,10 @@ class PropertyLookup
     }
 
     /**
-     * Sets some of the basic field properties that every field shares
+     * Sets some basic field properties that every field shares
      *
-     * @param DBTable\Field $field
-     * @param stdClass     $fieldDef
      */
-    private function setProperties(DBTable\Field $field, stdClass $fieldDef)
+    private function setProperties(DBTable\Field $field, stdClass $fieldDef): void
     {
         // Set the generic field type pulled from the DB into the Field.
         $field->setDefinedType( $fieldDef->udt_name );
@@ -390,9 +327,8 @@ class PropertyLookup
      * Looks to the database to determine which fields are marked as a primary
      * key.  Returns a list of the field names.
      *
-     * @return string[]
      */
-    private function findPrimaryKeyFields()
+    private function findPrimaryKeyFields(): array
     {
         $sql = <<<SQL
 WITH schema_ns AS
@@ -477,9 +413,8 @@ SQL;
     /**
      * Assemble the list of field records for this table
      *
-     * @return array
      */
-    private function getFieldDefList()
+    private function getFieldDefList(): array
     {
         $sql = <<<SQL
 WITH type_list AS
@@ -548,7 +483,7 @@ fieldlist AS
             )
         ELSE
             data_type
-        END data_type,
+        END AS data_type,
         character_maximum_length,
         numeric_precision,
         numeric_scale,
