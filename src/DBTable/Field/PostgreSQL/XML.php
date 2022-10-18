@@ -18,16 +18,14 @@ class XML implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'string';
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
     }
@@ -35,7 +33,7 @@ class XML implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): mixed
     {
         return $inputValue;
     }
@@ -43,7 +41,7 @@ class XML implements Field
     /**
      * @inheritdoc
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key      = Field\Value::getBindKey();

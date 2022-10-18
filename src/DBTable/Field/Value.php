@@ -18,28 +18,24 @@ class Value
     /**
      * The name of the field
      *
-     * @var string
      */
-    private $fieldName = null;
+    private string $fieldName;
 
     /**
-     * The place holder that is used in the SQL string
+     * The placeholder that is used in the SQL string
      *
-     * @var string
      */
-    private $valueMarker = null;
+    private string $valueMarker;
 
     /**
      * The bindings to attach to the SQL for storing this value
      *
-     * @var array
      */
-    private $binding = [];
+    private array $binding = [];
 
     /**
      * Instantiate the field value
      *
-     * @param string $fieldName
      */
     public function __construct(string $fieldName)
     {
@@ -49,7 +45,6 @@ class Value
     /**
      * Provide the name of the field
      *
-     * @return string
      */
     public function getFieldName(): string
     {
@@ -57,13 +52,10 @@ class Value
     }
 
     /**
-     * Set the string place holder that will go into the SQL
+     * Set the string placeholder that will go into the SQL
      *
-     * @param string $sql
-     *
-     * @return $this
      */
-    public function setValueMarker(string $sql): self
+    public function setValueMarker(string $sql): static
     {
         $this->valueMarker = $sql;
 
@@ -73,9 +65,8 @@ class Value
     /**
      * Provide the string to put into the SQL statement
      *
-     * @return string|null
      */
-    public function getValueMarker()
+    public function getValueMarker(): ?string
     {
         return $this->valueMarker;
     }
@@ -83,12 +74,8 @@ class Value
     /**
      * Set a single binding value
      *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this
      */
-    public function addBinding(string $key, $value): self
+    public function addBinding(string $key, mixed $value): static
     {
         $this->binding[$key] = $value;
 
@@ -98,7 +85,6 @@ class Value
     /**
      * Provide the bound values array
      *
-     * @return array
      */
     public function getBoundValues(): array
     {
@@ -108,7 +94,6 @@ class Value
     /**
      * Provide the number of items bound to this field value
      *
-     * @return integer
      */
     public function getBindCount(): int
     {
@@ -118,7 +103,6 @@ class Value
     /**
      * Provide a unique binding key
      *
-     * @return string
      */
     static public function getBindKey(): string
     {

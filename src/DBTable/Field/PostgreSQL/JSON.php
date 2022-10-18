@@ -18,23 +18,20 @@ class JSON implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const string
      */
     const PHP_TYPE = 'array';
 
     /**
      * Value to return for valid JSON string
      *
-     * @const string
      */
     const JSON_OK = 'OK';
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
     }
@@ -42,7 +39,7 @@ class JSON implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): mixed
     {
         return $inputValue;
     }
@@ -54,13 +51,9 @@ class JSON implements Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
-     *
      * @throws RangeException
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key      = Field\Value::getBindKey();
@@ -127,13 +120,11 @@ class JSON implements Field
     }
 
     /**
-     * Verify a string is actually JSON
+     * Verify a string is actually JSON.
+     * If successful, returns 'OK'.  Otherwise, an error message.
      *
-     * @param string $jsonToTest
-     *
-     * @return string If successfull, returns 'OK'.  Otherwise, and error message
      */
-    protected function validateJSON($jsonToTest)
+    protected function validateJSON(string $jsonToTest): string
     {
         // Attempt to decode the JSON data
         json_decode($jsonToTest);

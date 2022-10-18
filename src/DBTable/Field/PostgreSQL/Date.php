@@ -21,7 +21,6 @@ class Date implements Field
     /**
      * Date formats needed for the different fields in play
      *
-     * @const
      */
     const FMT_DATE        = 'Y-m-d';
     const FMT_DATETIME    = 'Y-m-d H:i:s';
@@ -37,11 +36,10 @@ class Date implements Field
     const PHP_TYPE = '\DateTime';
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
     }
@@ -52,14 +50,10 @@ class Date implements Field
      * If the value is already a DateTime object, then it will just pass the
      * same object back.
      *
-     * @param string|DateTime $inputValue
-     *
-     * @return DateTime
-     *
      * @throws Exception
      * @throws RangeException
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): ?DateTime
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
@@ -69,7 +63,7 @@ class Date implements Field
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to an empty string when it isn't.
         if ( $inputValue === null and $this->isNullOk() )
         {
@@ -113,13 +107,9 @@ class Date implements Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
-     *
      * @throws Exception
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key      = Field\Value::getBindKey();
@@ -135,15 +125,8 @@ class Date implements Field
 
         switch ( $this->getDefinedType() )
         {
-            case PropertyLookup::T_DATE:
-                $fmt = self::FMT_DATE;
-                break;
-
-            case PropertyLookup::T_TIMESTAMP:
-                $fmt = self::FMT_DATETIME;
-                break;
-
             case 'timestamp':
+            case PropertyLookup::T_TIMESTAMP:
                 $fmt = self::FMT_DATETIME;
                 break;
 

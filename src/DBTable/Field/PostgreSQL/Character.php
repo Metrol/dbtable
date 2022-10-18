@@ -18,7 +18,6 @@ class Character implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'string';
 
@@ -26,16 +25,14 @@ class Character implements Field
      * Maximum number of characters to be allowed in the string.  If null, there
      * is no maximum.
      *
-     * @var integer|null
      */
-    private $maxVal;
+    private ?int $maxVal;
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
 
@@ -45,7 +42,7 @@ class Character implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): mixed
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
@@ -55,7 +52,7 @@ class Character implements Field
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to an empty string when it isn't.
         if ( $inputValue === null and $this->isNullOk() )
         {
@@ -81,9 +78,7 @@ class Character implements Field
 
         // If not null, not strict and all that, just make sure to truncate to
         // the maximum allowed characters
-        $rtn = substr($inputValue, 0, $this->maxVal);
-
-        return $rtn;
+        return substr($inputValue, 0, $this->maxVal);
     }
 
     /**
@@ -93,13 +88,9 @@ class Character implements Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
-     *
      * @throws RangeException
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key = Field\Value::getBindKey();
@@ -113,7 +104,7 @@ class Character implements Field
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to an empty string when it isn't.
         if ( $inputValue === null and $this->isNullOk() )
         {
@@ -154,21 +145,18 @@ class Character implements Field
     }
 
     /**
+     * How many characters are allowed in the field
      *
-     * @return integer
      */
-    public function getMaxCharacters()
+    public function getMaxCharacters(): int
     {
         return $this->maxVal;
     }
 
     /**
-     *
-     * @param integer $maxVal
-     *
-     * @return $this
+     * Set how many characters are allowed in the field
      */
-    public function setMaxCharacters($maxVal)
+    public function setMaxCharacters(int $maxVal): static
     {
         $this->maxVal = $maxVal;
 

@@ -18,49 +18,40 @@ class Enumerated implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'string';
 
     /**
      * The Enumerated Type this field uses
      *
-     * @var string
      */
-    private $enumType;
+    private string $enumType;
 
     /**
      * The Schema where the Enumerated Type exists
      *
-     * @var string
      */
-    private $schema;
+    private string $schema;
 
     /**
      * List of allowed values for this field that have been assigned
      *
-     * @var array
      */
-    private $eVals;
+    private array $eVals = [];
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
-
-        $this->enumType = null;
-        $this->schema   = null;
-        $this->eVals    = [];
     }
 
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): mixed
     {
         return $inputValue;
     }
@@ -71,12 +62,8 @@ class Enumerated implements Field
      * string representations.
      *
      * No quotes or escaping of characters will be performed.
-     *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key = Field\Value::getBindKey();
@@ -89,9 +76,8 @@ class Enumerated implements Field
 
     /**
      *
-     * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->eVals;
     }
@@ -100,11 +86,8 @@ class Enumerated implements Field
      * Set the values that are allowed to be assigned to this field.  Once set,
      * they may not be changed.
      *
-     * @param array $values
-     *
-     * @return $this
      */
-    public function setValues(array $values)
+    public function setValues(array $values): static
     {
         if ( empty($this->eVals) )
         {
@@ -117,9 +100,8 @@ class Enumerated implements Field
     /**
      * Provides the enumerated type this field uses.
      *
-     * @return string
      */
-    public function getEnumType()
+    public function getEnumType(): string
     {
         return $this->enumType;
     }
@@ -128,13 +110,10 @@ class Enumerated implements Field
      * Set the enumerated type this field uses.
      * Once set, this value can not be changed.
      *
-     * @param string $enumType
-     *
-     * @return $this
      */
-    public function setEnumType($enumType)
+    public function setEnumType(string $enumType): static
     {
-        if ( $this->enumType === null )
+        if ( ! isset($this->enumType) )
         {
             $this->enumType = $enumType;
         }
@@ -145,24 +124,20 @@ class Enumerated implements Field
     /**
      * Provides the schema that the enumerated type is in
      *
-     * @return string
      */
-    public function getSchema()
+    public function getSchema(): string
     {
         return $this->schema;
     }
 
     /**
      * Set the schema where the enumerated type exists.
-     * Once siet, the value can not be changed.
+     * Once set, the value can not be changed.
      *
-     * @param string $schema
-     *
-     * @return $this
      */
-    public function setSchema($schema)
+    public function setSchema(string $schema): static
     {
-        if ( $this->schema === null )
+        if ( ! isset($this->schema) )
         {
             $this->schema = $schema;
         }
@@ -174,18 +149,15 @@ class Enumerated implements Field
      * Looks up the allowed values for the specified enum type and assigns that
      * list to this object.  May only be run once.
      *
-     * @param PDO $db
-     *
-     * @return $this
      */
-    public function runEnumValues(PDO $db)
+    public function runEnumValues(PDO $db): static
     {
-        if ( !empty($this->eVals) )
+        if ( ! empty($this->eVals) )
         {
             return $this;
         }
 
-        if ( empty($this->enumType) or empty($this->schema) )
+        if ( ! isset($this->enumType) or ! isset($this->schema) )
         {
             return $this;
         }
@@ -197,7 +169,7 @@ class Enumerated implements Field
 
         $sql = <<<SQL
 SELECT
-    trim(enumlabel) enumlabel
+    trim(enumlabel) AS enumlabel
 FROM
     pg_catalog.pg_enum e
     JOIN pg_catalog.pg_type t

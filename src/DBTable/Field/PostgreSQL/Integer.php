@@ -18,69 +18,58 @@ class Integer implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'integer';
 
     /**
      * Multiplier to raise the bytes by to get the range of the integer
      *
-     * @const
      */
     const BYTE_MULT = 256;
 
     /**
      * Number of bits in a byte.
      *
-     * @const
      */
     const BITS_PER_BYTE = 8;
 
     /**
      * If not specified, assume this will be a 4 byte integer
      *
-     * @const
      */
     const DEFAULT_PRECISION = 4;
 
     /**
      * The number of bytes used to represent this number.
      *
-     * @var integer
      */
-    private $precision;
+    private int $precision = self::DEFAULT_PRECISION;
 
     /**
      * Calculated maximum value this integer may hold based on the precision
      *
-     * @var integer
      */
-    private $maxVal;
+    private int $maxVal;
 
     /**
      * Calculated minimum value this integer may hold based on the precision
      *
-     * @var integer
      */
-    private $minVal;
+    private int $minVal;
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
-        $this->precision = self::DEFAULT_PRECISION;
-        $this->maxVal    = null;
-        $this->minVal    = null;
     }
 
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): ?int
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
@@ -90,7 +79,7 @@ class Integer implements Field
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to a 0 when it isn't
         if ( $inputValue === null and $this->isNullOk() )
         {
@@ -147,13 +136,9 @@ class Integer implements Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
-     *
      * @throws RangeException
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key      = Field\Value::getBindKey();
@@ -166,7 +151,7 @@ class Integer implements Field
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to a 0 when it isn't
         if ( $inputValue === null and $this->isNullOk() )
         {
@@ -227,11 +212,10 @@ class Integer implements Field
 
     /**
      *
-     * @return integer
      */
-    public function getMax()
+    public function getMax(): int
     {
-        if ( $this->maxVal === null )
+        if ( ! isset($this->maxVal)  )
         {
             $this->maxVal = pow(self::BYTE_MULT, $this->precision) / 2;
             $this->maxVal--;
@@ -242,11 +226,10 @@ class Integer implements Field
 
     /**
      *
-     * @return integer
      */
-    public function getMin()
+    public function getMin(): int
     {
-        if ( $this->minVal === null )
+        if ( ! isset($this->minVal) )
         {
             $this->minVal = pow(self::BYTE_MULT, $this->precision) / 2 * -1;
         }
@@ -258,17 +241,14 @@ class Integer implements Field
      * Set the precision of this integer in bits.  This value must be divisible
      * by 8 so that it represents the number of bytes involved.
      *
-     * @param mixed $precision
-     *
-     * @return $this;
      */
-    public function setPrecision($precision)
+    public function setPrecision(int $precision): static
     {
-        $prec = intval($precision);
+        $prec = $precision;
 
         if ( $prec % self::BITS_PER_BYTE == 0 )
         {
-            $this->precision = intval($precision) / self::BITS_PER_BYTE;
+            $this->precision = $precision / self::BITS_PER_BYTE;
         }
 
         return $this;

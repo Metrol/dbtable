@@ -25,111 +25,82 @@ interface DBTable
     /**
      * Provide the basic name of the table
      *
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Return the database schema, if applicable, for the table
      *
-     * @return string
      */
-    public function getSchema();
+    public function getSchema(): string;
 
     /**
      * Provide the Fully Qualified Name of the table ready to be applied
      * to an SQL statement without quotes.
      *
-     * @param string $alias Optional alias suffix for the table
-     *
-     * @return string
      */
-    public function getFQN($alias = null);
+    public function getFQN(string $alias = null): string;
 
     /**
      * Provide the Fully Qualified Name of the table ready to be applied
      * to an SQL statement complete with the appropriate quotes
      *
-     * @param string $alias Optional alias suffix for the table
-     *
-     * @return string
      */
-    public function getFQNQuoted($alias = null);
+    public function getFQNQuoted(string $alias = null): string;
 
     /**
      * Tells the object to look to the database to define the field properties
      * that exist for this table
      *
-     * @param PDO $db Active PDO connection used to lookup properties
-     *
-     * @return $this
      */
-    public function runFieldLookup(PDO $db);
+    public function runFieldLookup(PDO $db): static;
 
     /**
      * Checks to see if there are fields already loaded up in this object.
      * This doesn't check if all the fields are loaded.  Just if any have been.
      *
-     * @return boolean
      */
-    public function isLoaded();
+    public function isLoaded(): bool;
 
     /**
      * Adds a field object to the Field set for this table
      *
-     * @param Field $fields
-     *
-     * @return $this
      */
-    public function addField(Field $fields);
+    public function addField(Field $field): static;
 
     /**
      * Provide the requested field object for this table
      *
-     * @param string $fieldName
-     *
-     * @return Field|null
      */
-    public function getField($fieldName);
+    public function getField(string $fieldName): ?Field;
 
     /**
      * The list of fields that are in this table
      *
-     * @return Field\Set
      */
-    public function getFields();
+    public function getFields(): Field\Set;
 
     /**
      * Checks to see if the specified field exists
      *
-     * @param string $fieldName
-     *
-     * @return boolean
      */
-    public function fieldExists($fieldName);
+    public function fieldExists(string $fieldName): bool;
 
    /**
      * Set which fields are primary keys for the table.
      *
-     * @param string[] $primaryKeyFields
-     *
-     * @return $this
      */
-    public function setPrimaryKeyFields(array $primaryKeyFields);
+    public function setPrimaryKeyFields(array $primaryKeyFields): static;
 
     /**
      * Provide the field or fields that make up the primary key
      *
-     * @return string[]
      */
-    public function getPrimaryKeys();
+    public function getPrimaryKeys(): array;
 
     /**
      * Push this table on to the Table Bank to be cached for a future lookup.
      *
-     * @param string $connectionName Optional extra info to avoid name conflicts
-     *
-     * @return $this
      */
-    public function bankIt($connectionName = null);
+    public function bankIt(string $connectionName = null): static;
 }

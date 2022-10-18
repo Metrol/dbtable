@@ -22,41 +22,35 @@ class Numeric implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'float';
 
     /**
      * How many digits of precision used
      *
-     * @var integer
      */
-    protected $precision;
+    protected int $precision;
 
     /**
      * The scale of decimal places used
      *
-     * @var integer
      */
-    protected $scale;
+    protected int $scale;
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
      * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
-
-        $this->precision = null;
-        $this->scale     = null;
     }
 
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): ?float
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
@@ -112,7 +106,7 @@ class Numeric implements Field
     /**
      * @inheritdoc
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
@@ -181,13 +175,10 @@ class Numeric implements Field
     /**
      * Set the precision of this type
      *
-     * @param integer
-     *
-     * @return $this
      */
-    public function setPrecision($digits)
+    public function setPrecision(int $digits): static
     {
-        $this->precision = intval($digits);
+        $this->precision = $digits;
 
         return $this;
     }
@@ -195,53 +186,45 @@ class Numeric implements Field
     /**
      * Set the scale, defining the number of digits to the right of the decimal
      *
-     * @param integer
-     *
-     * @return $this
      */
-    public function setScale($digits)
+    public function setScale(int $digits): static
     {
-        $this->scale = intval($digits);
+        $this->scale = $digits;
 
         return $this;
     }
 
     /**
      *
-     * @return float|null
      */
-    public function getMax()
+    public function getMax(): ?float
     {
         $p = $this->precision;
         $s = $this->scale;
 
-        if ( $p === null or $s === null )
+        if ( ! isset($p) or ! isset($s) )
         {
             return null;
         }
 
-        $max = pow(10, $p - $s) - pow(10, $s * -1);
-
-        return $max;
+        return pow(10, $p - $s) - pow(10, $s * -1);
     }
 
     /**
      *
-     * @return float
      */
-    public function getMin()
+    public function getMin(): ?float
     {
         $p = $this->precision;
         $s = $this->scale;
 
-        if ( $p === null or $s === null )
+        if ( ! isset($p) or ! isset($s) )
         {
             return null;
         }
 
         $max = pow(10, $p - $s) - pow(10, $s * -1);
-        $min = $max * -1;
 
-        return $min;
+        return $max * -1;
     }
 }

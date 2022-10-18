@@ -13,14 +13,13 @@ trait NameTrait
     /**
      * The name of this field
      *
-     * @var string
      */
-    private $fieldName = '';
+    private string $fieldName = '';
 
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->fieldName;
     }
@@ -28,7 +27,7 @@ trait NameTrait
     /**
      * @inheritdoc
      */
-    public function setName($fieldName)
+    public function setName(string $fieldName): static
     {
         if ( empty($this->fieldName) )
         {
@@ -41,7 +40,7 @@ trait NameTrait
     /**
      * @inheritdoc
      */
-    public function getFQN($tableAlias = null)
+    public function getFQN(string $tableAlias = null): string
     {
         $rtn = '';
 

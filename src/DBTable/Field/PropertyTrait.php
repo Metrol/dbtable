@@ -13,35 +13,31 @@ trait PropertyTrait
     /**
      * Is this field allowed to be set to null?
      *
-     * @var boolean
      */
-    private $nullOk = true;
+    private bool $nullOk = true;
 
     /**
      * Default value for this field, if such a default was set.
      *
-     * @var mixed
      */
-    private $defaultValue = null;
+    private mixed $defaultValue = null;
 
     /**
      * Is this field a primary key?
      *
-     * @var boolean
      */
-    private $primaryKey = false;
+    private bool $primaryKey = false;
 
     /**
      * The UDT name of the field as reported by the query.
      *
-     * @var string
      */
-    private $udtName = '';
+    private string $udtName = '';
 
     /**
      * @inheritdoc
      */
-    public function setNullOk($flag)
+    public function setNullOk(bool $flag): static
     {
         if ( $flag )
         {
@@ -58,7 +54,7 @@ trait PropertyTrait
     /**
      * @inheritdoc
      */
-    public function isNullOk()
+    public function isNullOk(): bool
     {
         return $this->nullOk;
     }
@@ -66,7 +62,7 @@ trait PropertyTrait
     /**
      * @inheritdoc
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(mixed $defaultValue): static
     {
         $this->defaultValue = $defaultValue;
 
@@ -76,27 +72,23 @@ trait PropertyTrait
     /**
      * @inheritdoc
      */
-    public function getDefaultValue()
+    public function getDefaultValue(): mixed
     {
         return $this->defaultValue;
     }
 
     /**
      *
-     * @return string
      */
-    public function getDefinedType()
+    public function getDefinedType(): string
     {
         return $this->udtName;
     }
 
     /**
      *
-     * @param string $typeName
-     *
-     * @return $this
      */
-    public function setDefinedType($typeName)
+    public function setDefinedType(string $typeName): static
     {
         $this->udtName = $typeName;
 
@@ -106,9 +98,8 @@ trait PropertyTrait
     /**
      * Provide the PHP Type for this object based on the class constant
      *
-     * @return string
      */
-    public function getPhpType()
+    public function getPhpType(): string
     {
         $rtn = '';
 

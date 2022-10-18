@@ -18,16 +18,14 @@ class Boolean implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'bool';
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
     }
@@ -36,11 +34,8 @@ class Boolean implements Field
      * Insure the default value, when set, stores the actual boolean value
      * against this field.
      *
-     * @param string|bool $defaultValue
-     *
-     * @return $this
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(mixed $defaultValue): static
     {
         if ( $defaultValue === true or $defaultValue === 'true' or $defaultValue === 't' )
         {
@@ -58,7 +53,7 @@ class Boolean implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): mixed
     {
         // When the value is already boolean, keep it that way
         if ( $inputValue === true or $inputValue === false )
@@ -86,7 +81,7 @@ class Boolean implements Field
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to a false if it isn't
         if ( $inputValue === null and $this->isNullOk() )
         {
@@ -119,7 +114,7 @@ class Boolean implements Field
     /**
      * @inheritdoc
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $field = new Field\Value($this->fieldName);
         $key   = Field\Value::getBindKey();

@@ -18,16 +18,14 @@ class Point implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = 'array';
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
     }
@@ -35,11 +33,8 @@ class Point implements Field
     /**
      * Converts the database value to an array when used in a PHP context
      *
-     * @param string|array $inputValue
-     *
-     * @return array|null
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): ?array
     {
         if ( $inputValue === null )
         {
@@ -67,12 +62,12 @@ class Point implements Field
 
         $inpStr = $inputValue;
 
-        // Strip the parantheses from the string
+        // Strip the parentheses from the string
         $inpStr = str_replace('(', '', $inpStr);
         $inpStr = str_replace(')', '', $inpStr);
 
         // Get the values between the commas
-        list ( $x, $y ) = explode(',', $inpStr);
+        [ $x, $y ] = explode(',', $inpStr);
         $rtn[] = floatval($x);
         $rtn[] = floatval($y);
 
@@ -86,13 +81,9 @@ class Point implements Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param array|null $inputValue
-     *
-     * @return Field\Value
-     *
      * @throws RangeException
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $rtn = new Field\Value($this->fieldName);
 
@@ -133,7 +124,7 @@ class Point implements Field
                 throw new RangeException('Must have an array with 2 values for a Point field');
             }
 
-            list($x, $y) = $inputValue;
+            [$x, $y] = $inputValue;
 
             $x = floatval($x);
             $y = floatval($y);

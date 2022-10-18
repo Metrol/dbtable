@@ -11,7 +11,7 @@ namespace Metrol\DBTable;
 use Metrol\DBTable;
 
 /**
- * Stores tables within this object so they do not need to be looked up more
+ * Stores tables within this object, so they do not need to be looked up more
  * than a single time.
  *
  */
@@ -20,16 +20,15 @@ class Bank
     /**
      * The instance of this object.
      *
-     * @var Bank
      */
-    private static $instance;
+    private static Bank $instance;
 
     /**
      * Cached copies of the already instantiated
      *
      * @var DBTable[]
      */
-    private $tables = [];
+    private array $tables = [];
 
     /**
      * Singleton object, only one instance allowed
@@ -43,11 +42,10 @@ class Bank
     /**
      * Generate and instance of this object for internal callers only.
      *
-     * @return Bank
      */
-    protected static function getInstance()
+    protected static function getInstance(): Bank
     {
-        if ( !is_object(self::$instance) )
+        if ( ! isset(self::$instance) )
         {
             self::$instance = new Bank;
         }
@@ -56,17 +54,15 @@ class Bank
     }
 
     /**
-     * Make a deposit in the bank
+     * Make a deposit in the bank.  Only need a connection name if there are
+     * multiple connections.
      *
-     * @param DBTable $table
-     * @param string  $connectionName Only needed for multiple connections
      */
-    public static function deposit(DBTable $table, $connectionName = null)
+    public static function deposit(DBTable $table, string $connectionName = null): void
     {
         $key = $table->getName();
 
         // If the table has no name, get out of here now.
-        //
         if ( empty($key) )
         {
             return;
@@ -89,13 +85,8 @@ class Bank
      * Attempt to withdraw a table from the bank.  Returns null if that table
      * isn't found.
      *
-     * @param string $tableName
-     * @param string $schema
-     * @param string $connectionName
-     *
-     * @return DBTable|null
      */
-    public static function get($tableName, $schema = null, $connectionName = null)
+    public static function get(string $tableName, string $schema = null, string $connectionName = null): ?DBTable
     {
         $inst = self::getInstance();
 

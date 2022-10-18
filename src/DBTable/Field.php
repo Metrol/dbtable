@@ -19,98 +19,73 @@ interface Field
     /**
      * Provide the name of the field as is, without any quotes.
      *
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Sets the name of the field.  Once set, this value is immutable.
      *
-     * @param string $fieldName
-     *
-     * @return $this
      */
-    public function setName($fieldName);
+    public function setName(string $fieldName): static;
 
     /**
      * Provide the Fully Qualified Name of the field ready to be applied
      * to an SQL binding
      *
-     * @param  string $tableAlias Puts the table alias on the field name
-     *
-     * @return string
      */
-    public function getFQN($tableAlias = null);
+    public function getFQN(string $tableAlias = null): string;
 
     /**
      * Sets the flag to determine if NULL is an acceptable value for this field
      *
-     * @param boolean $flag
-     *
-     * @return $this
      */
-    public function setNullOk($flag);
+    public function setNullOk(bool $flag): static;
 
     /**
      * Is NULL okay for the field
      *
-     * @return boolean
      */
-    public function isNullOk();
+    public function isNullOk(): bool;
 
     /**
      * Sets the default value for this field
      *
-     * @param mixed $defaultValue
-     *
-     * @return $this
      */
-    public function setDefaultValue($defaultValue);
+    public function setDefaultValue(mixed $defaultValue): static;
 
     /**
      * Provide the default value for this field
      *
-     * @return mixed
      */
-    public function getDefaultValue();
+    public function getDefaultValue(): mixed;
 
     /**
      * Provide the defined type name
      *
-     * @return string
      */
-    public function getDefinedType();
+    public function getDefinedType(): string;
 
     /**
+     * Set the defined type
      *
-     * @param string $typeName
-     *
-     * @return $this
      */
-    public function setDefinedType($typeName);
+    public function setDefinedType(string $typeName): static;
 
     /**
      * Tells the field object not to try and get the value to fit if it's
      * outside the allowed boundaries.  Instead, throw a RangeException for
      * problems found.
      *
-     * @param boolean $flag
-     *
-     * @return $this
      */
-    public function setStrictValues($flag = true);
+    public function setStrictValues(bool $flag = true): static;
 
     /**
      * The value passed in will be converted to a PHP scalar/array/object
      * depending on the type of field in use.
      *
-     * @param mixed $inputValue
-     *
-     * @return mixed
-     *
      * @throws RangeException
      */
-    public function getPHPValue($inputValue);
+    public function getPHPValue(mixed $inputValue): mixed;
 
     /**
      * The value passed in will be converted to a format ready to be bound
@@ -119,18 +94,13 @@ interface Field
      *
      * No quotes or escaping of characters will be performed.
      *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
-     *
      * @throws RangeException
      */
-    public function getSqlBoundValue($inputValue);
+    public function getSqlBoundValue(mixed $inputValue): Field\Value;
 
     /**
      * Produce the PHP type that can be used in a properties tag for a docBlock
      *
-     * @return string
      */
-    public function getPHPType();
+    public function getPHPType(): string;
 }

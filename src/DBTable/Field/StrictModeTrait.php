@@ -13,20 +13,16 @@ trait StrictModeTrait
     /**
      * Flag for string value handling
      *
-     * @var boolean
      */
-    private $strict = false;
+    private bool $strict = false;
 
     /**
      * Tells the field object not to try and get the value to fit if it's
      * outside the allowed boundaries.  Instead, throw a RangeException for
      * problems found.
      *
-     * @param boolean $flag
-     *
-     * @return $this
      */
-    public function setStrictValues($flag = true)
+    public function setStrictValues(bool $flag = true): static
     {
         if ( $flag )
         {

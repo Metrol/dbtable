@@ -9,6 +9,7 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
+use DateTime;
 
 class Time implements Field
 {
@@ -17,16 +18,14 @@ class Time implements Field
     /**
      * What kind of PHP type should be expected from a field like this.
      *
-     * @const
      */
     const PHP_TYPE = '\DateTime';
 
     /**
-     * Instantiate the object and setup the basics
+     * Instantiate the object and set up the basics
      *
-     * @param string $fieldName
      */
-    public function __construct($fieldName)
+    public function __construct(string $fieldName)
     {
         $this->fieldName = $fieldName;
     }
@@ -34,7 +33,7 @@ class Time implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue($inputValue)
+    public function getPHPValue(mixed $inputValue): ?DateTime
     {
         return $inputValue;
     }
@@ -44,11 +43,8 @@ class Time implements Field
      * to a SQL engine execute.  Objects and arrays will be converted a Field
      * Value object.
      *
-     * @param mixed $inputValue
-     *
-     * @return Field\Value
      */
-    public function getSqlBoundValue($inputValue)
+    public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
         $fieldVal = new Field\Value($this->fieldName);
         $key      = Field\Value::getBindKey();

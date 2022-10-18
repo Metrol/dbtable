@@ -17,39 +17,33 @@ class PostgreSQL implements DBTable
     /**
      * The name of the table
      *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * The database schema the table resides in
      *
-     * @var string
      */
-    private $schema;
+    private string $schema;
 
     /**
      * The list of Field objects that make up this table.
      *
-     * @var Field\Set
      */
-    private $fields;
+    private Field\Set $fields;
 
     /**
      * The fields in this table, if any, that make up the primary key
      *
-     * @var string[]
      */
-    private $primaryKeyFields;
+    private array $primaryKeyFields;
 
     /**
      * Define that table name and schema.  Instantiate the rest of the
      * properties.
      *
-     * @param string $name
-     * @param string $schema
      */
-    public function __construct($name, $schema = null)
+    public function __construct(string $name, string $schema = null)
     {
         $this->name             = $name;
         $this->schema           = empty($schema) ? 'public' : $schema;
@@ -60,7 +54,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -68,7 +62,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getSchema()
+    public function getSchema(): string
     {
         return $this->schema;
     }
@@ -76,7 +70,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getFQN($alias = null)
+    public function getFQN($alias = null): string
     {
         $rtn = '';
 
@@ -99,7 +93,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getFQNQuoted($alias = null)
+    public function getFQNQuoted($alias = null): string
     {
         $rtn = '';
 
@@ -121,7 +115,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function runFieldLookup(PDO $db)
+    public function runFieldLookup(PDO $db): static
     {
         (new PropertyLookup($this, $db))->run();
 
@@ -131,7 +125,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function isLoaded()
+    public function isLoaded(): bool
     {
         $rtn = false;
 
@@ -146,7 +140,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function addField(Field $field)
+    public function addField(Field $field): static
     {
         $this->fields->addField($field);
 
@@ -156,7 +150,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getField($fieldName)
+    public function getField(string $fieldName): ?Field
     {
         return $this->fields->getField($fieldName);
     }
@@ -164,7 +158,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function fieldExists($fieldName)
+    public function fieldExists(string $fieldName): bool
     {
         return $this->fields->fieldExists($fieldName);
     }
@@ -172,7 +166,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getFields()
+    public function getFields(): Field\Set
     {
         return $this->fields;
     }
@@ -180,7 +174,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function setPrimaryKeyFields(array $primaryKeyFields)
+    public function setPrimaryKeyFields(array $primaryKeyFields): static
     {
         $this->primaryKeyFields = $primaryKeyFields;
 
@@ -190,7 +184,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getPrimaryKeys()
+    public function getPrimaryKeys(): array
     {
         return $this->primaryKeyFields;
     }
@@ -198,8 +192,10 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function bankIt($connectionName = null)
+    public function bankIt(string $connectionName = null): static
     {
         DBTable\Bank::deposit($this, $connectionName);
+
+        return $this;
     }
 }
