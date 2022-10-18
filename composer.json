@@ -6,6 +6,13 @@
     "homepage"   : "https://github.com/Metrol/DBTable",
     "version"    : "0.1.0",
 
+    "repositories" : [
+        {
+            "type": "vcs",
+            "url" : "https://github.com/Metrol/dbconnect"
+        }
+    ],
+
     "require" : {
         "php"     : "8.0.*",
         "ext-pdo" : "*",
@@ -14,12 +21,14 @@
 
     "require-dev": {
         "phpunit/phpunit"    : "^9.5",
-        "symfony/var-dumper" : "5.*"
+        "symfony/var-dumper" : "5.*",
+        "metrol/dbconnect"   : "*"
     },
 
     "autoload-dev": {
         "psr-4": {
             "Metrol\\Tests\\": "tests/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
