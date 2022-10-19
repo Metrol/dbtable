@@ -49,13 +49,13 @@ class Integer implements Field
      * Calculated maximum value this integer may hold based on the precision
      *
      */
-    private int $maxVal;
+    private int|float $maxVal;
 
     /**
      * Calculated minimum value this integer may hold based on the precision
      *
      */
-    private int $minVal;
+    private int|float $minVal;
 
     /**
      * Instantiate the object and set up the basics
@@ -213,7 +213,7 @@ class Integer implements Field
     /**
      *
      */
-    public function getMax(): int
+    public function getMax(): int|float
     {
         if ( ! isset($this->maxVal)  )
         {
@@ -227,7 +227,7 @@ class Integer implements Field
     /**
      *
      */
-    public function getMin(): int
+    public function getMin(): int|float
     {
         if ( ! isset($this->minVal) )
         {
