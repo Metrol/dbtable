@@ -6,67 +6,77 @@
  * @copyright (c) 2016, DBTable
  */
 
-namespace Metrol;
+namespace Metrol\Tests;
 
+use PHPUnit\Framework\TestCase;
+
+use Metrol\DBTable;
+// use Metrol\DBConnect;
 use PDO;
-use PDOException;
 use RangeException;
+use PDOException;
 
 /**
  * Test the PostgreSQL table and field objects
  *
  */
-class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
+class PostgreSQLTableTest extends TestCase
 {
     /**
      * File where I put the DB credentials
      *
-     * @const
      */
-    const DB_CREDENTIALS = 'etc/db.ini';
+    const DB_CREDENTIALS = 'etc/postgresql_test.ini';
 
     /**
      * The table used for testing
      *
-     * @const string
      */
     const TABLE_NAME = 'pgtable1';
 
     /**
      * The database to perform tests on
      *
-     * @var PDO
      */
-    private $db;
+    private PDO $db;
 
     /**
      * The table being worked with for testing
      *
-     * @var DBTable\PostgreSQL
      */
-    private $table;
+    private DBTable\PostgreSQL $table;
 
     /**
-     * Connect to the database so as to make the $db property available for
-     * testing.
+     * Connect to the database to make the $db property available for testing.
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
+        if ( isset($this->db) )
+        {
+            return;
+        }
+
+        // (new DBConnect\Load\INI(self::DB_CREDENTIALS))->run();
+        //
+        // $this->db = DBConnect\Connect\Bank::get();
+
         $ini = parse_ini_file(self::DB_CREDENTIALS);
 
         $dsn = 'pgsql:';
-        $dsn .= implode(';', ['host=' . $ini['DBHOST'],
-                              'port=' . $ini['DBPORT'],
-                              'dbname=' . $ini['DBNAME']]);
+        $dsn .= implode(';', [
+            'host=' . $ini['host'],
+            'port=' . $ini['port'],
+            'dbname=' . $ini['dbname']
+         ]);
 
         $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
 
         try
         {
-            $this->db = new PDO($dsn, $ini['DBUSER'], $ini['DBPASS'], $opts);
+            $this->db = new PDO($dsn, $ini['user'], $ini['password'], $opts);
         }
-        catch ( PDOException $e )
+        catch ( PDOException )
         {
             echo 'Connection to database failed.';
             exit;
@@ -80,9 +90,9 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
      * Disconnect from the database
      *
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->db = null;
+        unset($this->db);
     }
 
     /**
@@ -165,30 +175,28 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($field->getDefaultValue());
 
         $field = $this->table->getField('falsedef'); // Boolean, No Nulls, default False
-        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Boolean',
-                                $field);
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Boolean', $field);
         $this->assertEquals('falsedef', $field->getName());
 
         $this->assertFalse($field->getPHPValue(null));
 
         // Check for an exception when in strict
-        $field->setStrictValues(true);
+        $field->setStrictValues();
         $x = false;
 
         try
         {
             $field->getPHPValue(null);
         }
-        catch ( RangeException $e )
+        catch ( RangeException )
         {
             $x = true;
         }
 
         $this->assertTrue($x);
 
-        $field = $this->table->getField('truedef'); // Boolean, No Nulls, default False
-        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Boolean',
-                                $field);
+        $field = $this->table->getField('truedef'); // Boolean, No Nulls, default true
+        $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\Boolean', $field);
         $this->assertEquals('truedef', $field->getName());
 
         $this->assertTrue($field->getPHPValue(null));
@@ -420,7 +428,6 @@ class PostgreSQLTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $field->getPHPValue($testVal));
 
         $testVal  = 1.123;
-        $expected = 1;
         $this->assertEquals($expected, $field->getPHPValue($testVal));
 
         $testVal  = 0;
