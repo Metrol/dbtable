@@ -9,7 +9,6 @@
 namespace Metrol\DBTable\Field\PostgreSQL;
 
 use Metrol\DBTable\Field;
-use DateTime;
 
 class Time implements Field
 {
@@ -33,7 +32,7 @@ class Time implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue(mixed $inputValue): ?DateTime
+    public function getPHPValue(mixed $inputValue): mixed
     {
         return $inputValue;
     }
