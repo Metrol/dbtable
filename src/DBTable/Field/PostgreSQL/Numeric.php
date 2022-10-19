@@ -176,8 +176,15 @@ class Numeric implements Field
      * Set the precision of this type
      *
      */
-    public function setPrecision(int $digits): static
+    public function setPrecision(int $digits = null): static
     {
+        if ( is_null($digits) )
+        {
+            $this->precision = 0;
+
+            return $this;
+        }
+
         $this->precision = $digits;
 
         return $this;
@@ -187,8 +194,15 @@ class Numeric implements Field
      * Set the scale, defining the number of digits to the right of the decimal
      *
      */
-    public function setScale(int $digits): static
+    public function setScale(int $digits = null): static
     {
+        if ( is_null($digits) )
+        {
+            $this->scale = 0;
+
+            return $this;
+        }
+
         $this->scale = $digits;
 
         return $this;
