@@ -117,7 +117,7 @@ class Set implements Iterator, Countable
         reset($this->fields);
     }
 
-    public function current(): Field
+    public function current(): Field|false
     {
         return current($this->fields);
     }
@@ -127,7 +127,7 @@ class Set implements Iterator, Countable
         return key($this->fields);
     }
 
-    public function next(): Field
+    public function next(): Field|false
     {
         return next($this->fields);
     }
