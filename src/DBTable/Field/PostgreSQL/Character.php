@@ -148,15 +148,16 @@ class Character implements Field
      * How many characters are allowed in the field
      *
      */
-    public function getMaxCharacters(): int
+    public function getMaxCharacters(): ?int
     {
         return $this->maxVal;
     }
 
     /**
      * Set how many characters are allowed in the field
+     *
      */
-    public function setMaxCharacters(int $maxVal): static
+    public function setMaxCharacters(int $maxVal = null): static
     {
         $this->maxVal = $maxVal;
 
