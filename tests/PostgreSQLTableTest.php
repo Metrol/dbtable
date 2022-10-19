@@ -9,12 +9,10 @@
 namespace Metrol\Tests;
 
 use PHPUnit\Framework\TestCase;
-
 use Metrol\DBTable;
-// use Metrol\DBConnect;
+use Metrol\DBConnect;
 use PDO;
 use RangeException;
-use PDOException;
 
 /**
  * Test the PostgreSQL table and field objects
@@ -57,30 +55,8 @@ class PostgreSQLTableTest extends TestCase
             return;
         }
 
-        // (new DBConnect\Load\INI(self::DB_CREDENTIALS))->run();
-        //
-        // $this->db = DBConnect\Connect\Bank::get();
-
-        $ini = parse_ini_file(self::DB_CREDENTIALS);
-
-        $dsn = 'pgsql:';
-        $dsn .= implode(';', [
-            'host=' . $ini['host'],
-            'port=' . $ini['port'],
-            'dbname=' . $ini['dbname']
-         ]);
-
-        $opts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
-
-        try
-        {
-            $this->db = new PDO($dsn, $ini['user'], $ini['password'], $opts);
-        }
-        catch ( PDOException )
-        {
-            echo 'Connection to database failed.';
-            exit;
-        }
+        (new DBConnect\Load\INI(self::DB_CREDENTIALS))->run();
+        $this->db = DBConnect\Connect\Bank::get();
 
         $this->table = new DBTable\PostgreSQL(self::TABLE_NAME);
         $this->table->runFieldLookup($this->db);
