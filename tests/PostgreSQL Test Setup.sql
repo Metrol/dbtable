@@ -54,6 +54,8 @@ CREATE TABLE public.pgtable1
     yeahnay "YesNo",
     trueorfalse boolean,
     xypoint point,
+    falsedef boolean NOT NULL DEFAULT false,
+    truedef boolean NOT NULL DEFAULT true,
     CONSTRAINT pgtable1_pkey PRIMARY KEY ("primaryKeyID")
 )
 WITH (
