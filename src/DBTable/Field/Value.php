@@ -9,7 +9,7 @@
 namespace Metrol\DBTable\Field;
 
 /**
- * Provides the place holder and value bindings for a field being put into
+ * Provides the placeholder and value bindings for a field being put into
  * an SQL statement
  *
  */
@@ -68,6 +68,11 @@ class Value
      */
     public function getValueMarker(): ?string
     {
+        if ( ! isset($this->valueMarker) )
+        {
+            return null;
+        }
+
         return $this->valueMarker;
     }
 
