@@ -116,9 +116,19 @@ class Date implements Field
 
         $dateObj = $this->getPHPValue($inputValue);
 
-        if ( $dateObj === null )
+        if ( is_null($dateObj) )
         {
-            return $fieldVal;
+            if ( $this->isNullOk() )
+            {
+                $fieldVal->setValueMarker($key)
+                         ->addBinding($key, null);
+
+                return $fieldVal;
+            }
+            else
+            {
+                $dateObj = new DateTime;
+            }
         }
 
         $fmt = self::FMT_DATE;
@@ -136,7 +146,7 @@ class Date implements Field
         }
 
         $fieldVal->setValueMarker($key)
-            ->addBinding($key, $dateObj->format($fmt));
+                 ->addBinding($key, $dateObj->format($fmt));
 
         return $fieldVal;
     }
