@@ -19,7 +19,7 @@ class Integer implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'integer';
+    const PHP_TYPE = 'int';
 
     /**
      * Multiplier to raise the bytes by to get the range of the integer

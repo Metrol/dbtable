@@ -33,7 +33,7 @@ class Date implements Field
      *
      * @const
      */
-    const PHP_TYPE = '\DateTime';
+    const PHP_TYPE = 'DateTime';
 
     /**
      * Instantiate the object and set up the basics
