@@ -508,7 +508,7 @@ comments AS
                 pg_catalog.pg_class c
             WHERE
                 c.oid = (
-                    SELECT ( '"' || cols.table_name || '"' )::regclass::oid
+                    SELECT ('"' || :schema || '"."' || :table || '"')::regclass::oid
                 )
               AND
                 c.relname = cols.table_name
