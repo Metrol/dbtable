@@ -87,17 +87,43 @@ class Set implements Iterator, Countable
     {
         $out = '';
 
+        $typeLen = 0;
+        $nameLen = 0;
+
         foreach ( $this as $field )
         {
+            $type = $field->getPHPType();
+            $name = '$' . $field->getName();
+
+            if ( strlen($type) > $typeLen )
+            {
+                $typeLen = strlen($type);
+            }
+
+            if ( strlen($name) > $nameLen )
+            {
+                $nameLen = strlen($name);
+            }
+        }
+
+        foreach ( $this as $field )
+        {
+            $type    = $field->getPHPType();
+            $name    = '$' . $field->getName();
             $comment = $field->getComment();
 
             $out .= ' * @property ';
-            $out .= $field->getPHPType();
-            $out .= ' $'.$field->getName();
+            $out .= str_pad($type, $typeLen + 1);
+
 
             if ( ! empty($comment) )
             {
-                $out .= '  ' . $field->getComment();
+                $out .= str_pad($name, $nameLen + 1);
+                $out .= $field->getComment();
+            }
+            else
+            {
+                $out .= $name;
             }
 
             $out .= PHP_EOL;
