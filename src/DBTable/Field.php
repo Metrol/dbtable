@@ -72,6 +72,18 @@ interface Field
     public function setDefinedType(string $typeName): static;
 
     /**
+     * Get the comment stored for the field
+     *
+     */
+    public function getComment(): string;
+
+    /**
+     * Set the comment stored for the field
+     *
+     */
+    public function setComment(string $comment): static;
+
+    /**
      * Tells the field object not to try and get the value to fit if it's
      * outside the allowed boundaries.  Instead, throw a RangeException for
      * problems found.

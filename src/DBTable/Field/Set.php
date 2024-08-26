@@ -89,9 +89,17 @@ class Set implements Iterator, Countable
 
         foreach ( $this as $field )
         {
+            $comment = $field->getComment();
+
             $out .= ' * @property ';
             $out .= $field->getPHPType();
             $out .= ' $'.$field->getName();
+
+            if ( ! empty($comment) )
+            {
+                $out .= '  ' . $field->getComment();
+            }
+
             $out .= PHP_EOL;
         }
 

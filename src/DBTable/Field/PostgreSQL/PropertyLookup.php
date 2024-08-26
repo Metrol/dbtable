@@ -321,6 +321,11 @@ class PropertyLookup
         {
             $field->setDefaultValue($fieldDef->column_default);
         }
+
+        if ( ! is_null($fieldDef->column_comment) )
+        {
+            $field->setComment($fieldDef->column_comment);
+        }
     }
 
     /**
@@ -491,9 +496,49 @@ fieldlist AS
         udt_name
     FROM
         fieldlist_prelim fp
+),
+comments AS
+(
+    SELECT
+        cols.column_name,
+        (
+            SELECT
+                pg_catalog.col_description(c.oid, cols.ordinal_position::int)
+            FROM
+                pg_catalog.pg_class c
+            WHERE
+                c.oid = (
+                    SELECT ( '"' || cols.table_name || '"' )::regclass::oid
+                )
+              AND
+                c.relname = cols.table_name
+        ) AS column_comment
+    FROM
+        information_schema.columns cols
+    WHERE
+        cols.table_name   = :table
+        AND
+        cols.table_schema = :schema
+),
+summary AS
+(
+    SELECT
+        fl.column_name,
+        fl.is_nullable,
+        fl.column_default,
+        fl.data_type,
+        fl.character_maximum_length,
+        fl.numeric_precision,
+        fl.numeric_scale,
+        fl.udt_schema,
+        fl.udt_name,
+        c.column_comment
+    FROM
+        fieldlist fl
+        LEFT JOIN comments c
+            on fl.column_name = c.column_name
 )
-
-SELECT * FROM fieldlist;
+SELECT * FROM summary;
 SQL;
 
         $sth = $this->db->prepare($sql);

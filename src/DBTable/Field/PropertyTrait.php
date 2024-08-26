@@ -29,6 +29,12 @@ trait PropertyTrait
     private bool $primaryKey = false;
 
     /**
+     * The comment in the database for a field
+     *
+     */
+    private string $comment = '';
+
+    /**
      * The UDT name of the field as reported by the query.
      *
      */
@@ -91,6 +97,26 @@ trait PropertyTrait
     public function setDefinedType(string $typeName): static
     {
         $this->udtName = $typeName;
+
+        return $this;
+    }
+
+    /**
+     * Get the comment stored for the field
+     *
+     */
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set the comment stored for the field
+     *
+     */
+    public function setComment(string $comment): static
+    {
+        $this->comment = $comment;
 
         return $this;
     }
