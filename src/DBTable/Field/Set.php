@@ -39,16 +39,14 @@ class Set implements Iterator, Countable
      * Fetch a field from the set by name.  Returns null if not found
      *
      */
-    public function getField(string $fieldName): ?Field
+    public function getField(string $fieldName): Field|null
     {
-        $rtn = null;
-
         if ( $this->fieldExists($fieldName) )
         {
-            $rtn = $this->fields[$fieldName];
+            return $this->fields[$fieldName];
         }
 
-        return $rtn;
+        return null;
     }
 
     /**

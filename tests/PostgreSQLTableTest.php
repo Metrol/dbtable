@@ -109,12 +109,6 @@ class PostgreSQLTableTest extends TestCase
         $this->assertEquals('json', $field->getDefinedType());
         $this->assertTrue($field->isNullOk());
         $this->assertNull($field->getDefaultValue());
-
-        // $field = $this->table->getField('xmarkuplang'); // XML field
-        // $this->assertInstanceOf('Metrol\DBTable\Field\PostgreSQL\XML', $field);
-        // $this->assertEquals('xml', $field->getDefinedType());
-        // $this->assertTrue($field->isNullOk());
-        // $this->assertNull($field->getDefaultValue());
     }
 
     /**

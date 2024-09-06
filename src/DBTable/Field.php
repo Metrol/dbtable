@@ -33,7 +33,7 @@ interface Field
      * to an SQL binding
      *
      */
-    public function getFQN(string $tableAlias = null): string;
+    public function getFQN(string|null $tableAlias = null): string;
 
     /**
      * Sets the flag to determine if NULL is an acceptable value for this field

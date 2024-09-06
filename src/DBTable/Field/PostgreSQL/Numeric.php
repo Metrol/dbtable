@@ -50,23 +50,23 @@ class Numeric implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue(mixed $inputValue): ?float
+    public function getPHPValue(mixed $inputValue): float|null
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
         }
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to a 0 when it isn't
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
             return 0;
         }
@@ -110,7 +110,7 @@ class Numeric implements Field
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -119,16 +119,16 @@ class Numeric implements Field
         $fieldValue = new Field\Value($this->fieldName);
         $key        = Field\Value::getBindKey();
 
-        // When not in strict mode, either keep the null value when its okay or
+        // When not in strict mode, either keep the null value when it's okay or
         // convert to a 0 when it isn't
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             $fieldValue->setValueMarker($key)
                 ->addBinding($key, null);
 
             return $fieldValue;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
             $fieldValue->setValueMarker($key)
                 ->addBinding($key, 0);
@@ -176,7 +176,7 @@ class Numeric implements Field
      * Set the precision of this type
      *
      */
-    public function setPrecision(int $digits = null): static
+    public function setPrecision(int|null $digits = null): static
     {
         if ( is_null($digits) )
         {
@@ -194,7 +194,7 @@ class Numeric implements Field
      * Set the scale, defining the number of digits to the right of the decimal
      *
      */
-    public function setScale(int $digits = null): static
+    public function setScale(int|null $digits = null): static
     {
         if ( is_null($digits) )
         {
@@ -211,7 +211,7 @@ class Numeric implements Field
     /**
      *
      */
-    public function getMax(): ?float
+    public function getMax(): float|null
     {
         $p = $this->precision;
         $s = $this->scale;
@@ -227,7 +227,7 @@ class Numeric implements Field
     /**
      *
      */
-    public function getMin(): ?float
+    public function getMin(): float|null
     {
         $p = $this->precision;
         $s = $this->scale;

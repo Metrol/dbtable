@@ -66,7 +66,7 @@ class Value
      * Provide the string to put into the SQL statement
      *
      */
-    public function getValueMarker(): ?string
+    public function getValueMarker(): string|null
     {
         if ( ! isset($this->valueMarker) )
         {

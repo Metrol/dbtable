@@ -46,7 +46,7 @@ class Character implements Field
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -54,17 +54,17 @@ class Character implements Field
 
         // When not in strict mode, either keep the null value when it's okay or
         // convert to an empty string when it isn't.
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
             return '';
         }
 
         // Without a max value, no need to check for the string length
-        if ( $this->maxVal === null or $this->maxVal == 0 )
+        if ( is_null($this->maxVal) or $this->maxVal == 0 )
         {
             return $inputValue;
         }
@@ -98,7 +98,7 @@ class Character implements Field
 
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -106,11 +106,11 @@ class Character implements Field
 
         // When not in strict mode, either keep the null value when it's okay or
         // convert to an empty string when it isn't.
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             return $fieldVal;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
             $fieldVal->setValueMarker($key)
                 ->addBinding($key, $val);
@@ -119,7 +119,7 @@ class Character implements Field
         }
 
         // Without a max value, no need to check for the string length
-        if ( $this->maxVal === null or $this->maxVal == 0 )
+        if ( is_null($this->maxVal) or $this->maxVal == 0 )
         {
             $fieldVal->setValueMarker($key)
                 ->addBinding($key, $inputValue);
@@ -148,7 +148,7 @@ class Character implements Field
      * How many characters are allowed in the field
      *
      */
-    public function getMaxCharacters(): ?int
+    public function getMaxCharacters(): int|null
     {
         return $this->maxVal;
     }
@@ -157,7 +157,7 @@ class Character implements Field
      * Set how many characters are allowed in the field
      *
      */
-    public function setMaxCharacters(int $maxVal = null): static
+    public function setMaxCharacters(int|null $maxVal = null): static
     {
         $this->maxVal = $maxVal;
 

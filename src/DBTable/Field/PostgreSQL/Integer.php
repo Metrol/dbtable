@@ -69,11 +69,11 @@ class Integer implements Field
     /**
      * @inheritdoc
      */
-    public function getPHPValue(mixed $inputValue): ?int
+    public function getPHPValue(mixed $inputValue): int|null
     {
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -81,11 +81,11 @@ class Integer implements Field
 
         // When not in strict mode, either keep the null value when it's okay or
         // convert to a 0 when it isn't
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
             return 0;
         }
@@ -145,7 +145,7 @@ class Integer implements Field
 
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting SQL value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -153,14 +153,14 @@ class Integer implements Field
 
         // When not in strict mode, either keep the null value when it's okay or
         // convert to a 0 when it isn't
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             $fieldVal->setValueMarker($key)
                 ->addBinding($key, null);
 
             return $fieldVal;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
             $fieldVal->setValueMarker($key)
                      ->addBinding($key, 0);

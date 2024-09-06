@@ -317,7 +317,7 @@ class PropertyLookup
 
         // If there's a default value, let the Field know about it.  The
         // specifics of what to do about that need to be addressed by the Field.
-        if ( $fieldDef->column_default !== null )
+        if ( ! is_null($fieldDef->column_default) )
         {
             $field->setDefaultValue($fieldDef->column_default);
         }

@@ -39,14 +39,14 @@ interface DBTable
      * to an SQL statement without quotes.
      *
      */
-    public function getFQN(string $alias = null): string;
+    public function getFQN(string|null $alias = null): string;
 
     /**
      * Provide the Fully Qualified Name of the table ready to be applied
      * to an SQL statement complete with the appropriate quotes
      *
      */
-    public function getFQNQuoted(string $alias = null): string;
+    public function getFQNQuoted(string|null $alias = null): string;
 
     /**
      * Tells the object to look to the database to define the field properties
@@ -72,7 +72,7 @@ interface DBTable
      * Provide the requested field object for this table
      *
      */
-    public function getField(string $fieldName): ?Field;
+    public function getField(string $fieldName): Field|null;
 
     /**
      * The list of fields that are in this table
@@ -102,5 +102,5 @@ interface DBTable
      * Push this table on to the Table Bank to be cached for a future lookup.
      *
      */
-    public function bankIt(string $connectionName = null): static;
+    public function bankIt(string|null $connectionName = null): static;
 }

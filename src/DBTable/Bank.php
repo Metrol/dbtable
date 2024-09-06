@@ -58,7 +58,7 @@ class Bank
      * multiple connections.
      *
      */
-    public static function deposit(DBTable $table, string $connectionName = null): void
+    public static function deposit(DBTable $table, string|null $connectionName = null): void
     {
         $key = $table->getName();
 
@@ -86,7 +86,9 @@ class Bank
      * isn't found.
      *
      */
-    public static function get(string $tableName, string $schema = null, string $connectionName = null): ?DBTable
+    public static function get(string      $tableName,
+                               string|null $schema = null,
+                               string|null $connectionName = null): DBTable|null
     {
         $inst = self::getInstance();
 
@@ -99,12 +101,12 @@ class Bank
 
         if ( ! empty($schema) )
         {
-            $key = $schema. '.' .$key;
+            $key = $schema . '.' . $key;
         }
 
         if ( ! empty($connectionName) )
         {
-            $key = $connectionName.':'.$key;
+            $key = $connectionName . ':' . $key;
         }
 
         if ( isset($inst->tables[$key]) )

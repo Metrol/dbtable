@@ -59,7 +59,7 @@ class JSON implements Field
         $key      = Field\Value::getBindKey();
 
         // Handle an okay null value
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             $key = Field\Value::getBindKey();
 
@@ -70,7 +70,7 @@ class JSON implements Field
         }
 
         // Silently deal with a null that's not allowed when not in strict mode
-        if ( $inputValue === null and !$this->isNullOk() and !$this->strict )
+        if ( is_null($inputValue) and !$this->isNullOk() and !$this->strict )
         {
             $key = Field\Value::getBindKey();
 
@@ -81,7 +81,7 @@ class JSON implements Field
         }
 
         // Null value that's not okay, and in strict mode.  Throw exception!
-        if ( $inputValue === null and !$this->isNullOk() and $this->strict )
+        if ( is_null($inputValue) and !$this->isNullOk() and $this->strict )
         {
             throw new RangeException('Null not allowed for field: '. $this->fieldName);
         }

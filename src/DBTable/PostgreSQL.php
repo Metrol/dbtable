@@ -43,7 +43,7 @@ class PostgreSQL implements DBTable
      * properties.
      *
      */
-    public function __construct(string $name, string $schema = null)
+    public function __construct(string $name, string|null $schema = null)
     {
         $this->name             = $name;
         $this->schema           = empty($schema) ? 'public' : $schema;
@@ -70,7 +70,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getFQN($alias = null): string
+    public function getFQN(string|null $alias = null): string
     {
         $rtn = '';
 
@@ -93,7 +93,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getFQNQuoted($alias = null): string
+    public function getFQNQuoted(string|null $alias = null): string
     {
         $rtn = '';
 
@@ -150,7 +150,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function getField(string $fieldName): ?Field
+    public function getField(string $fieldName): Field|null
     {
         return $this->fields->getField($fieldName);
     }
@@ -192,7 +192,7 @@ class PostgreSQL implements DBTable
     /**
      * @inheritdoc
      */
-    public function bankIt(string $connectionName = null): static
+    public function bankIt(string|null $connectionName = null): static
     {
         DBTable\Bank::deposit($this, $connectionName);
 

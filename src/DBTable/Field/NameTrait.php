@@ -40,7 +40,7 @@ trait NameTrait
     /**
      * @inheritdoc
      */
-    public function getFQN(string $tableAlias = null): string
+    public function getFQN(string|null $tableAlias = null): string
     {
         $rtn = '';
 

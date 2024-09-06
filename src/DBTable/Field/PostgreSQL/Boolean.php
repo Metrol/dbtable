@@ -75,7 +75,7 @@ class Boolean implements Field
 
         // In strict mode, if null is not okay and the value is null then we
         // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and $inputValue === null )
+        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
         {
             throw new RangeException('Setting PHP value of '.$this->fieldName.
                                       ' to null is not allowed');
@@ -83,13 +83,13 @@ class Boolean implements Field
 
         // When not in strict mode, either keep the null value when it's okay or
         // convert to a false if it isn't
-        if ( $inputValue === null and $this->isNullOk() )
+        if ( is_null($inputValue) and $this->isNullOk() )
         {
             return null;
         }
-        else if ( $inputValue === null and !$this->isNullOk() )
+        else if ( is_null($inputValue) and !$this->isNullOk() )
         {
-            if ( $this->getDefaultValue() !== null )
+            if ( ! is_null($this->getDefaultValue()) )
             {
                 return $this->getDefaultValue();
             }
@@ -126,7 +126,7 @@ class Boolean implements Field
         {
             $value = null;
         }
-        else if ( $this->defaultValue !== null )
+        else if ( ! is_null($this->defaultValue) )
         {
             $value = $this->defaultValue;
         }
@@ -135,7 +135,7 @@ class Boolean implements Field
             $value = false;
         }
 
-        if ( $phpVal === null )
+        if ( is_null($phpVal) )
         {
             $value = null;
         }
