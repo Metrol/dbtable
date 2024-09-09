@@ -12,7 +12,6 @@ use Metrol\DBTable;
 use Metrol\DBTable\Field\PostgreSQL as Fld;
 use PDO;
 use stdClass;
-use Exception;
 
 /**
  * Used by the PostgreSQL Table class to lookup all the details about the
@@ -135,9 +134,9 @@ class PropertyLookup
                     $field = $this->newTimeField($fieldDef);
                     break;
 
-                // case self::T_ARRAY:
-                //     $field = $this->newArrayField($fieldDef);
-                //     break;
+                 case self::T_ARRAY:
+                     $field = $this->newArrayField($fieldDef);
+                     break;
 
                 case self::T_BOOL:
                     $field = $this->newBooleanField($fieldDef);
@@ -276,6 +275,18 @@ class PropertyLookup
     private function newTimeField(stdClass $fieldDef): DBTable\Field
     {
         $field = new Fld\Time($fieldDef->column_name);
+        $this->setProperties($field, $fieldDef);
+
+        return $field;
+    }
+
+    /**
+     * Generate a new Array field
+     *
+     */
+    private function newArrayField(stdClass $fieldDef): DBTable\Field
+    {
+        $field = new Fld\FldArray($fieldDef->column_name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
