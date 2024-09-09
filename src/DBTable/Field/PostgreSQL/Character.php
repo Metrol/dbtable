@@ -26,7 +26,7 @@ class Character implements Field
      * is no maximum.
      *
      */
-    private ?int $maxVal;
+    private int|null $maxVal;
 
     /**
      * Instantiate the object and set up the basics
