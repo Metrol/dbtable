@@ -1,10 +1,11 @@
 <?php
 /**
- * @author        Michael Collette <mcollette@meetingevolution.net>
- * @version       1.0
- * @package       DBTable
- * @copyright (c) 2016, DBTable
+ * @author        Michael Collette <metrol@metrol.net>
+ * @version       2.0
+ * @package       Metrol\DBTable
+ * @copyright (c) 2024, Michael Collette
  */
+
 
 namespace Metrol\Tests;
 

@@ -11,7 +11,6 @@ namespace Metrol\DBTable\Field\PostgreSQL;
 use Metrol\DBTable;
 use Metrol\DBTable\Field\PostgreSQL as Fld;
 use PDO;
-use stdClass;
 
 /**
  * Used by the PostgreSQL Table class to lookup all the details about the
@@ -37,8 +36,8 @@ class PropertyLookup
     const T_CHAR         = 'character';
     const T_TEXT         = 'text';
     const T_ARRAY        = 'ARRAY';
-    const T_RANGE        = 'range';
-    const T_DTRANGE      = 'daterange';
+//    const T_RANGE        = 'range';
+//    const T_DTRANGE      = 'daterange';
     const T_BOOL         = 'boolean';
     const T_ENUM         = 'enum';
     const T_DATE         = 'date';
@@ -80,11 +79,15 @@ class PropertyLookup
      */
     public function run(): static
     {
-        $pkFields = $this->findPrimaryKeyFields();
-        $this->table->setPrimaryKeyFields($pkFields);
+        $primaryKeyLookup = new Reflect\PrimaryKey($this->table, $this->db);
+        $primaryKeyLookup->run();
+        $primaryKeys = $primaryKeyLookup->output();
 
-        $fieldDefList = $this->getFieldDefList();
+        $fieldLookup = new Reflect\Fields($this->table, $this->db);
+        $fieldLookup->run();
+        $fieldDefList = $fieldLookup->output();
 
+        $this->table->setPrimaryKeyFields($primaryKeys);
         $this->populateFieldsIntoTable($fieldDefList);
 
         return $this;
@@ -94,7 +97,7 @@ class PropertyLookup
      * Takes the field information that has been passed in and creates Field
      * objects that are then passed into the Table object
      *
-     * @param stdClass[] $fieldDefList
+     * @param Reflect\FieldDTO[] $fieldDefList
      */
     private function populateFieldsIntoTable(array $fieldDefList): void
     {
@@ -102,7 +105,7 @@ class PropertyLookup
         {
             $field = null;
 
-            switch ( trim($fieldDef->data_type) )
+            switch ( trim($fieldDef->dataType) )
             {
                 case self::T_BIGINT:
                 case self::T_SMALLINT:
@@ -171,11 +174,11 @@ class PropertyLookup
      * Generate a new Integer field
      *
      */
-    private function newIntegerField(stdClass $fieldDef): DBTable\Field
+    private function newIntegerField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Integer($fieldDef->column_name);
+        $field = new Fld\Integer($fieldDef->name);
         $this->setProperties($field, $fieldDef);
-        $field->setPrecision($fieldDef->numeric_precision);
+        $field->setPrecision($fieldDef->numericPrecision);
 
         return $field;
     }
@@ -184,12 +187,12 @@ class PropertyLookup
      * Generate a new Numeric field
      *
      */
-    private function newNumericField(stdClass $fieldDef): DBTable\Field
+    private function newNumericField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Numeric($fieldDef->column_name);
+        $field = new Fld\Numeric($fieldDef->name);
         $this->setProperties($field, $fieldDef);
-        $field->setPrecision($fieldDef->numeric_precision);
-        $field->setScale($fieldDef->numeric_scale);
+        $field->setPrecision($fieldDef->numericPrecision);
+        $field->setScale($fieldDef->numericScale);
 
         return $field;
     }
@@ -198,12 +201,12 @@ class PropertyLookup
      * Generate a new Character field
      *
      */
-    private function newCharacterField(stdClass $fieldDef): DBTable\Field
+    private function newCharacterField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Character($fieldDef->column_name);
+        $field = new Fld\Character($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
-        $field->setMaxCharacters( $fieldDef->character_maximum_length );
+        $field->setMaxCharacters( $fieldDef->characterMaximumLength );
 
         return $field;
     }
@@ -212,9 +215,9 @@ class PropertyLookup
      * Generate a new Boolean field
      *
      */
-    private function newBooleanField(stdClass $fieldDef): DBTable\Field
+    private function newBooleanField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Boolean($fieldDef->column_name);
+        $field = new Fld\Boolean($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -224,9 +227,9 @@ class PropertyLookup
      * Generate a new JSON field
      *
      */
-    private function newJSONField(stdClass $fieldDef): DBTable\Field
+    private function newJSONField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\JSON($fieldDef->column_name);
+        $field = new Fld\JSON($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -236,9 +239,9 @@ class PropertyLookup
      * Generate a new XML field
      *
      */
-    private function newXMLField(stdClass $fieldDef): DBTable\Field
+    private function newXMLField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\XML($fieldDef->column_name);
+        $field = new Fld\XML($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -248,9 +251,9 @@ class PropertyLookup
      * Generate a new Point field
      *
      */
-    private function newPointField(stdClass $fieldDef): DBTable\Field
+    private function newPointField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Point($fieldDef->column_name);
+        $field = new Fld\Point($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -260,9 +263,9 @@ class PropertyLookup
      * Generate a new Date field
      *
      */
-    private function newDateField(stdClass $fieldDef): DBTable\Field
+    private function newDateField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Date($fieldDef->column_name);
+        $field = new Fld\Date($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -272,9 +275,9 @@ class PropertyLookup
      * Generate a new Time field
      *
      */
-    private function newTimeField(stdClass $fieldDef): DBTable\Field
+    private function newTimeField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Time($fieldDef->column_name);
+        $field = new Fld\Time($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -284,9 +287,9 @@ class PropertyLookup
      * Generate a new Array field
      *
      */
-    private function newArrayField(stdClass $fieldDef): DBTable\Field
+    private function newArrayField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\FldArray($fieldDef->column_name);
+        $field = new Fld\FldArray($fieldDef->name);
         $this->setProperties($field, $fieldDef);
 
         return $field;
@@ -296,12 +299,12 @@ class PropertyLookup
      * Generate a new Enumerated field
      *
      */
-    private function newEnumeratedField(stdClass $fieldDef): DBTable\Field
+    private function newEnumeratedField(Reflect\FieldDTO $fieldDef): DBTable\Field
     {
-        $field = new Fld\Enumerated($fieldDef->column_name);
+        $field = new Fld\Enumerated($fieldDef->name);
         $this->setProperties($field, $fieldDef);
-        $field->setEnumType($fieldDef->udt_name)
-            ->setSchema($fieldDef->udt_schema)
+        $field->setEnumType($fieldDef->typeName)
+            ->setSchema($fieldDef->typeSchema)
             ->runEnumValues($this->db);
 
         return $field;
@@ -311,13 +314,13 @@ class PropertyLookup
      * Sets some basic field properties that every field shares
      *
      */
-    private function setProperties(DBTable\Field $field, stdClass $fieldDef): void
+    private function setProperties(DBTable\Field $field, Reflect\FieldDTO $fieldDef): void
     {
         // Set the generic field type pulled from the DB into the Field.
-        $field->setDefinedType( $fieldDef->udt_name );
+        $field->setDefinedType( $fieldDef->typeName );
 
         // Is NULL an acceptable value
-        if ( $fieldDef->is_nullable == 'YES' )
+        if ( $fieldDef->isNullable == 'YES' )
         {
             $field->setNullOk(true);
         }
@@ -328,237 +331,14 @@ class PropertyLookup
 
         // If there's a default value, let the Field know about it.  The
         // specifics of what to do about that need to be addressed by the Field.
-        if ( ! is_null($fieldDef->column_default) )
+        if ( ! is_null($fieldDef->defaultValue) )
         {
-            $field->setDefaultValue($fieldDef->column_default);
+            $field->setDefaultValue($fieldDef->defaultValue);
         }
 
-        if ( ! is_null($fieldDef->column_comment) )
+        if ( ! is_null($fieldDef->comment) )
         {
-            $field->setComment($fieldDef->column_comment);
+            $field->setComment($fieldDef->comment);
         }
-    }
-
-    /**
-     * Looks to the database to determine which fields are marked as a primary
-     * key.  Returns a list of the field names.
-     *
-     */
-    private function findPrimaryKeyFields(): array
-    {
-        $sql = <<<SQL
-WITH schema_ns AS
-(
-    SELECT
-        oid relnamespace
-    FROM 
-        pg_namespace
-    WHERE
-        nspname = :schema
-),
-tbl_class AS
-(
-    SELECT
-        oid tblclassid
-    FROM
-        pg_class
-    WHERE
-        relname = :table
-        AND
-        relnamespace = (
-            SELECT
-                relnamespace
-            FROM
-                schema_ns
-        )
-),
-indexs AS
-(
-    SELECT
-        indexrelid
-    FROM
-        pg_index
-    WHERE
-        indrelid = (
-            SELECT
-                tblclassid
-            FROM
-                tbl_class
-            )
-        AND
-        indisprimary = 't'
-),
-pk AS
-(
-    SELECT
-        attname primary_key
-    FROM
-        pg_attribute
-   WHERE
-        attrelid = (
-            SELECT
-                indexrelid
-            FROM 
-                indexs
-            )
-)
-
-SELECT primary_key FROM pk
-
-SQL;
-
-        $sth = $this->db->prepare($sql);
-        $sth->execute(
-            [
-                ':table' => $this->table->getName(),
-                ':schema' => $this->table->getSchema()
-            ]);
-
-        $fetched = $sth->fetchAll(PDO::FETCH_OBJ);
-
-        $rtn = [];
-
-        foreach ( $fetched as $fObj )
-        {
-            $rtn[] = $fObj->primary_key;
-        }
-
-        return $rtn;
-    }
-
-    /**
-     * Assemble the list of field records for this table
-     *
-     */
-    private function getFieldDefList(): array
-    {
-        $sql = <<<SQL
-WITH type_list AS
-(
-    SELECT
-        typname,
-        typnamespace,
-        typtype
-    FROM
-        pg_type
-),
-fieldlist_prelim AS
-(
-    SELECT
-        column_name,
-        is_nullable,
-        column_default,
-        data_type,
-        character_maximum_length,
-        numeric_precision,
-        numeric_scale,
-        udt_schema,
-        udt_name
-    FROM
-        information_schema.columns
-    WHERE
-        table_schema = :schema
-        AND
-        table_name = :table
-),
-fieldlist AS
-(
-    SELECT
-        fp.column_name,
-        fp.is_nullable,
-        fp.column_default,
-        CASE WHEN data_type = 'USER-DEFINED' THEN
-            (
-                SELECT
-                    CASE
-                       WHEN tp.typtype = 'b' THEN
-                           'base'
-                       WHEN tp.typtype = 'c' THEN
-                           'composite'
-                       WHEN tp.typtype = 'd' THEN
-                           'domain'
-                       WHEN tp.typtype = 'e' THEN
-                           'enum'
-                       WHEN tp.typtype = 'p' THEN
-                           'psuedo'
-                       WHEN tp.typtype = 'r' THEN
-                           'range'
-                    END
-                FROM
-                    type_list tp
-                WHERE
-                    tp.typname = fp.udt_name
-                    AND tp.typnamespace = (
-                        SELECT
-                            oid
-                        FROM
-                            pg_namespace ns
-                        WHERE
-                            ns.nspname = fp.udt_schema
-                    )
-            )
-        ELSE
-            data_type
-        END AS data_type,
-        character_maximum_length,
-        numeric_precision,
-        numeric_scale,
-        udt_schema,
-        udt_name
-    FROM
-        fieldlist_prelim fp
-),
-comments AS
-(
-    SELECT
-        cols.column_name,
-        (
-            SELECT
-                pg_catalog.col_description(c.oid, cols.ordinal_position::int)
-            FROM
-                pg_catalog.pg_class c
-            WHERE
-                c.oid = (
-                    SELECT ('"' || :schema || '"."' || :table || '"')::regclass::oid
-                )
-              AND
-                c.relname = cols.table_name
-        ) AS column_comment
-    FROM
-        information_schema.columns cols
-    WHERE
-        cols.table_name   = :table
-        AND
-        cols.table_schema = :schema
-),
-summary AS
-(
-    SELECT
-        fl.column_name,
-        fl.is_nullable,
-        fl.column_default,
-        fl.data_type,
-        fl.character_maximum_length,
-        fl.numeric_precision,
-        fl.numeric_scale,
-        fl.udt_schema,
-        fl.udt_name,
-        c.column_comment
-    FROM
-        fieldlist fl
-        LEFT JOIN comments c
-            on fl.column_name = c.column_name
-)
-SELECT * FROM summary;
-SQL;
-
-        $sth = $this->db->prepare($sql);
-        $sth->execute(
-            [
-                ':table' => $this->table->getName(),
-                ':schema' => $this->table->getSchema()
-            ]);
-
-        return $sth->fetchAll(PDO::FETCH_OBJ);
     }
 }
