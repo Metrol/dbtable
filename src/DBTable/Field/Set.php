@@ -159,9 +159,9 @@ class Set implements Iterator, Countable
         return key($this->fields);
     }
 
-    public function next(): Field|false
+    public function next(): void
     {
-        return next($this->fields);
+        next($this->fields);
     }
 
     public function valid(): bool

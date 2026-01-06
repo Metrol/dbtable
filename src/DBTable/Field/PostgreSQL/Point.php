@@ -19,7 +19,7 @@ class Point implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'array';
+    const string PHP_TYPE = 'array';
 
     /**
      * Instantiate the object and set up the basics

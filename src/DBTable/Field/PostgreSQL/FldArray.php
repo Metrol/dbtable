@@ -42,10 +42,6 @@ class FldArray implements Field
 
     public function getSqlBoundValue(mixed $inputValue): Field\Value
     {
-        $fieldVal = new Field\Value($this->fieldName);
-        $key = Field\Value::getBindKey();
-        $val = '';
-
-        return $fieldVal;
+        return new Field\Value($this->fieldName);
     }
 }

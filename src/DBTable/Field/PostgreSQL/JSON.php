@@ -19,13 +19,13 @@ class JSON implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'array';
+    const string PHP_TYPE = 'array';
 
     /**
      * Value to return for valid JSON string
      *
      */
-    const JSON_OK = 'OK';
+    const string JSON_OK = 'OK';
 
     /**
      * Instantiate the object and set up the basics

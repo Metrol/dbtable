@@ -117,7 +117,7 @@ class PostgreSQL implements DBTable
      */
     public function runFieldLookup(PDO $db): static
     {
-        (new PropertyLookup($this, $db))->run();
+        new PropertyLookup($this, $db)->run();
 
         return $this;
     }

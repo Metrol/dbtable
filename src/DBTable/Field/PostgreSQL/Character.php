@@ -19,7 +19,7 @@ class Character implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'string';
+    const string PHP_TYPE = 'string';
 
     /**
      * Maximum number of characters to be allowed in the string.  If null, there

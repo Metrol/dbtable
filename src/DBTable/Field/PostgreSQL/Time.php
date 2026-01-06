@@ -18,7 +18,7 @@ class Time implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'DateTime';
+    const string PHP_TYPE = 'DateTime';
 
     /**
      * Instantiate the object and set up the basics

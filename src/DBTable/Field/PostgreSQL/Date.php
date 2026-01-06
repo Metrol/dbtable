@@ -22,18 +22,18 @@ class Date implements Field
      * Date formats needed for the different fields in play
      *
      */
-    const FMT_DATE        = 'Y-m-d';
-    const FMT_DATETIME    = 'Y-m-d H:i:s';
-    const FMT_DATETIME_TZ = 'Y-m-d H:i:s T';
+    const string FMT_DATE        = 'Y-m-d';
+    const string FMT_DATETIME    = 'Y-m-d H:i:s';
+    const string FMT_DATETIME_TZ = 'Y-m-d H:i:s T';
 
-    const DEF_TIMEZONE    = 'UTC';
+    const string DEF_TIMEZONE    = 'UTC';
 
     /**
      * What kind of PHP type should be expected from a field like this.
      *
      * @const
      */
-    const PHP_TYPE = 'DateTime';
+    const string PHP_TYPE = 'DateTime';
 
     /**
      * Instantiate the object and set up the basics

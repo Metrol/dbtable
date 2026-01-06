@@ -19,7 +19,7 @@ class Boolean implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'bool';
+    const string PHP_TYPE = 'bool';
 
     /**
      * Instantiate the object and set up the basics

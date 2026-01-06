@@ -25,30 +25,30 @@ class PropertyLookup
      *
      * @const
      */
-    const T_INTEGER      = 'integer';
-    const T_BIGINT       = 'bigint';
-    const T_SMALLINT     = 'smallint';
-    const T_NUMERIC      = 'numeric';
-    const T_MONEY        = 'money';
-    const T_DOUBLE_PREC  = 'double precision';
-    const T_REAL         = 'real';
-    const T_VARCHAR      = 'character varying';
-    const T_CHAR         = 'character';
-    const T_TEXT         = 'text';
-    const T_ARRAY        = 'ARRAY';
-//    const T_RANGE        = 'range';
-//    const T_DTRANGE      = 'daterange';
-    const T_BOOL         = 'boolean';
-    const T_ENUM         = 'enum';
-    const T_DATE         = 'date';
-    const T_TIMESTAMP_TZ = 'timestamp with time zone';
-    const T_TIMESTAMP    = 'timestamp without time zone';
-    const T_TIME_TZ      = 'time with time zone';
-    const T_TIME         = 'time without time zone';
-    const T_JSON         = 'json';
-    const T_JSONB        = 'jsonb';
-    const T_XML          = 'xml';
-    const T_POINT        = 'point';
+    const string T_INTEGER      = 'integer';
+    const string T_BIGINT       = 'bigint';
+    const string T_SMALLINT     = 'smallint';
+    const string T_NUMERIC      = 'numeric';
+    const string T_MONEY        = 'money';
+    const string T_DOUBLE_PREC  = 'double precision';
+    const string T_REAL         = 'real';
+    const string T_VARCHAR      = 'character varying';
+    const string T_CHAR         = 'character';
+    const string T_TEXT         = 'text';
+    const string T_ARRAY        = 'ARRAY';
+//    const T_RANGE             = 'range';
+//    const T_DTRANGE           = 'daterange';
+    const string T_BOOL         = 'boolean';
+    const string T_ENUM         = 'enum';
+    const string T_DATE         = 'date';
+    const string T_TIMESTAMP_TZ = 'timestamp with time zone';
+    const string T_TIMESTAMP    = 'timestamp without time zone';
+    const string T_TIME_TZ      = 'time with time zone';
+    const string T_TIME         = 'time without time zone';
+    const string T_JSON         = 'json';
+    const string T_JSONB        = 'jsonb';
+    const string T_XML          = 'xml';
+    const string T_POINT        = 'point';
 
     /**
      * The database connection to use for the lookup

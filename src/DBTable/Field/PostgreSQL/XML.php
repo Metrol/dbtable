@@ -19,7 +19,7 @@ class XML implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'string';
+    const string PHP_TYPE = 'string';
 
     /**
      * Instantiate the object and set up the basics

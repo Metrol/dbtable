@@ -23,7 +23,7 @@ class Numeric implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'float';
+    const string PHP_TYPE = 'float';
 
     /**
      * How many digits of precision used

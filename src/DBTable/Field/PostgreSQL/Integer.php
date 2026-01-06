@@ -19,25 +19,25 @@ class Integer implements Field
      * What kind of PHP type should be expected from a field like this.
      *
      */
-    const PHP_TYPE = 'int';
+    const string PHP_TYPE = 'int';
 
     /**
      * Multiplier to raise the bytes by to get the range of the integer
      *
      */
-    const BYTE_MULT = 256;
+    const int BYTE_MULT = 256;
 
     /**
      * Number of bits in a byte.
      *
      */
-    const BITS_PER_BYTE = 8;
+    const int BITS_PER_BYTE = 8;
 
     /**
      * If not specified, assume this will be a 4 byte integer
      *
      */
-    const DEFAULT_PRECISION = 4;
+    const int DEFAULT_PRECISION = 4;
 
     /**
      * The number of bytes used to represent this number.
