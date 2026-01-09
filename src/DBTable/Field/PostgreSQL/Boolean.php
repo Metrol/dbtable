@@ -61,6 +61,30 @@ class Boolean implements Field
             return $inputValue;
         }
 
+        if ( is_null($inputValue) )
+        {
+            if ( $this->isNullOk() )
+            {
+                return null;
+            }
+            else if ( $this->strict )
+            {
+                throw new RangeException('Setting PHP value of '.$this->fieldName.
+                                         ' to null is not allowed');
+            }
+            else
+            {
+                if ( ! is_null($this->getDefaultValue()) )
+                {
+                    return $this->getDefaultValue();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         // PostgreSQL will always have a t or f as the value for true/false
         // Also check for the value of 'true' or 'false' as a string
         if ( strtolower($inputValue) === 't' or strtolower($inputValue) === 'true' )
@@ -71,32 +95,6 @@ class Boolean implements Field
         if ( strtolower($inputValue) === 'f' or strtolower($inputValue) === 'false' )
         {
             return false;
-        }
-
-        // In strict mode, if null is not okay and the value is null then we
-        // need to throw an error.
-        if ( $this->strict and !$this->isNullOk() and is_null($inputValue) )
-        {
-            throw new RangeException('Setting PHP value of '.$this->fieldName.
-                                      ' to null is not allowed');
-        }
-
-        // When not in strict mode, either keep the null value when it's okay or
-        // convert to a false if it isn't
-        if ( is_null($inputValue) and $this->isNullOk() )
-        {
-            return null;
-        }
-        else if ( is_null($inputValue) and !$this->isNullOk() )
-        {
-            if ( ! is_null($this->getDefaultValue()) )
-            {
-                return $this->getDefaultValue();
-            }
-            else
-            {
-                return false;
-            }
         }
 
         // If we actually made it this far, default to PHP handling of boolean
